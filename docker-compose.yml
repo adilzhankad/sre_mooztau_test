@@ -1,0 +1,66 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${DB_NAME:-mooztau_db}
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  auth:
+    build: ./auth_service
+    env_file: .env
+    environment:
+      DB_HOST: db
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "0.0.0.0:8004:8002"
+    restart: unless-stopped
+    command: >
+      sh -c "sleep 3 && python seed.py && uvicorn main:app --host 0.0.0.0 --port 8002 --workers 2"
+
+  orders:
+    build: ./orders_service
+    env_file: .env
+    environment:
+      DB_HOST: db
+      FINANCE_SERVICE_URL: http://finance:8003
+    depends_on:
+      db:
+        condition: service_healthy
+      auth:
+        condition: service_started
+    ports:
+      - "0.0.0.0:8001:8001"
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
+    command: >
+      sh -c "alembic upgrade head && python -m scripts.seed && uvicorn main:app --host 0.0.0.0 --port 8001 --workers 2"
+
+  finance:
+    build: ./finance_service
+    env_file: .env
+    environment:
+      DB_HOST: db
+    depends_on:
+      db:
+        condition: service_healthy
+      auth:
+        condition: service_started
+    ports:
+      - "0.0.0.0:8003:8003"
+    restart: unless-stopped
+    command: >
+      sh -c "python seed.py && uvicorn main:app --host 0.0.0.0 --port 8003 --workers 2"
+
+volumes:
+  pgdata:
