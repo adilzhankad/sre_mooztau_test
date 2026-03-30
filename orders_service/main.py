@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from prometheus_fastapi_instrumentator import Instrumentator
 
 from routers import products, prices, orders, factory, analytics
 
@@ -8,6 +9,10 @@ app = FastAPI(
     description="Сервис заказов, продуктов и производства MoozTau",
     version="2.0.0",
 )
+
+Instrumentator(
+    excluded_handlers=["/health", "/metrics"],
+).instrument(app).expose(app, endpoint="/metrics")
 
 app.add_middleware(
     CORSMiddleware,

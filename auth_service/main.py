@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from prometheus_fastapi_instrumentator import Instrumentator
 
 from routes import router
 
@@ -8,6 +9,10 @@ app = FastAPI(
     description="Authentication and authorization microservice for MoozTau platform",
     version="1.0.0",
 )
+
+Instrumentator(
+    excluded_handlers=["/health", "/metrics"],
+).instrument(app).expose(app, endpoint="/metrics")
 
 app.add_middleware(
     CORSMiddleware,

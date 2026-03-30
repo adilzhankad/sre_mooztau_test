@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from prometheus_fastapi_instrumentator import Instrumentator
 
 from database import engine, Base
 from models import Category, BankAccount, Transaction  # noqa: F401 — ensure models are registered
@@ -10,6 +11,10 @@ app = FastAPI(
     description="Микросервис финансового учёта MoozTau: доходы, расходы, категории, счета, отчёты",
     version="1.0.0",
 )
+
+Instrumentator(
+    excluded_handlers=["/health", "/metrics"],
+).instrument(app).expose(app, endpoint="/metrics")
 
 app.add_middleware(
     CORSMiddleware,
