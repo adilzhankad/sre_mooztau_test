@@ -1,5 +1,4 @@
 from typing import Optional, List
-from datetime import date
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session, joinedload
@@ -163,31 +162,29 @@ def factory_dashboard(
     db: Session = Depends(get_db),
     user: User = Depends(require_factory),
 ):
-    queue_count = db.query(func.count(Order.id)).filter(
+    confirmed_count = db.query(func.count(Order.id)).filter(
         Order.status == OrderStatus.CONFIRMED
     ).scalar() or 0
 
-    in_production_count = db.query(func.count(Order.id)).filter(
+    in_production = db.query(func.count(Order.id)).filter(
         Order.status == OrderStatus.IN_PRODUCTION
     ).scalar() or 0
 
-    ready_count = db.query(func.count(Order.id)).filter(
+    ready = db.query(func.count(Order.id)).filter(
         Order.status == OrderStatus.READY
     ).scalar() or 0
 
-    today = date.today()
-    overdue_count = db.query(func.count(Order.id)).filter(
-        Order.status.in_([OrderStatus.CONFIRMED, OrderStatus.IN_PRODUCTION]),
-        Order.deadline != None,
-        Order.deadline < today,
+    shipped = db.query(func.count(Order.id)).filter(
+        Order.status == OrderStatus.SHIPPING
     ).scalar() or 0
 
+    total_orders = confirmed_count + in_production + ready + shipped
+
     return {
-        "queue_count": queue_count,
-        "in_production_count": in_production_count,
-        "ready_count": ready_count,
-        "overdue_count": overdue_count,
-        "total_active": queue_count + in_production_count + ready_count,
+        "total_orders": total_orders,
+        "in_production": in_production,
+        "ready": ready,
+        "shipped": shipped,
     }
 
 

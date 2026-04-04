@@ -25,7 +25,6 @@ def seed():
                 "contact_email": "hq@mooztau.kz",
                 "address": "Astana, Mangilik El 1",
                 "region": "Astana",
-                "credit_limit": None,
             },
             {
                 "name": "MoozTau Almaty Branch",
@@ -34,7 +33,6 @@ def seed():
                 "contact_email": "almaty@mooztau.kz",
                 "address": "Almaty, Abay Ave 10",
                 "region": "Almaty",
-                "credit_limit": None,
             },
             {
                 "name": "MoozTau Shymkent Branch",
@@ -43,7 +41,6 @@ def seed():
                 "contact_email": "shymkent@mooztau.kz",
                 "address": "Shymkent, Tauke Khan 50",
                 "region": "Turkistan",
-                "credit_limit": None,
             },
             {
                 "name": "Dealer Astana Premium",
@@ -52,7 +49,6 @@ def seed():
                 "contact_email": "astana-premium@dealer.kz",
                 "address": "Astana, Kabanbay Batyr 5",
                 "region": "Astana",
-                "credit_limit": 5000000.00,
             },
             {
                 "name": "Dealer Almaty Gold",
@@ -61,7 +57,6 @@ def seed():
                 "contact_email": "almaty-gold@dealer.kz",
                 "address": "Almaty, Dostyk Ave 200",
                 "region": "Almaty",
-                "credit_limit": 3000000.00,
             },
             {
                 "name": "Dealer Karaganda",
@@ -70,7 +65,6 @@ def seed():
                 "contact_email": "karaganda@dealer.kz",
                 "address": "Karaganda, Bukhar Zhyrau 50",
                 "region": "Karaganda",
-                "credit_limit": 2000000.00,
             },
             {
                 "name": "Dealer Aktobe",
@@ -79,7 +73,6 @@ def seed():
                 "contact_email": "aktobe@dealer.kz",
                 "address": "Aktobe, Abil Khan 15",
                 "region": "Aktobe",
-                "credit_limit": 1500000.00,
             },
             {
                 "name": "Dealer Atyrau",
@@ -88,7 +81,6 @@ def seed():
                 "contact_email": "atyrau@dealer.kz",
                 "address": "Atyrau, Satpaev 22",
                 "region": "Atyrau",
-                "credit_limit": 2500000.00,
             },
             {
                 "name": "Dealer Kostanay",
@@ -97,7 +89,6 @@ def seed():
                 "contact_email": "kostanay@dealer.kz",
                 "address": "Kostanay, Al-Farabi 8",
                 "region": "Kostanay",
-                "credit_limit": 1000000.00,
             },
             {
                 "name": "Dealer Pavlodar",
@@ -106,7 +97,6 @@ def seed():
                 "contact_email": "pavlodar@dealer.kz",
                 "address": "Pavlodar, Kairbaev 30",
                 "region": "Pavlodar",
-                "credit_limit": 1200000.00,
             },
         ]
 

@@ -85,12 +85,18 @@ def _serialize_transaction(t: Transaction) -> dict:
         "transaction_type": t.transaction_type,
         "amount": t.amount,
         "currency": t.currency,
+        "account_id": t.account_id,
         "account_name": t.account.name if t.account else None,
         "comment": t.comment or "",
+        "category_l1_id": t.category_l1_id,
         "category_l1_name": t.category_l1.name if t.category_l1 else None,
+        "category_l2_id": t.category_l2_id,
         "category_l2_name": t.category_l2.name if t.category_l2 else None,
+        "category_l3_id": t.category_l3_id,
         "category_l3_name": t.category_l3.name if t.category_l3 else None,
+        "category_l4_id": t.category_l4_id,
         "category_l4_name": t.category_l4.name if t.category_l4 else None,
+        "initiator_id": t.initiator_id,
         "initiator_name": t.initiator.full_name if t.initiator else None,
         "order_id": t.order_id,
         "order_number": t.order_number or "",
@@ -282,6 +288,9 @@ def list_transactions(
     return {
         "count": total,
         "results": [_serialize_transaction(t) for t in transactions],
+        "page": page,
+        "page_size": page_size,
+        "pages": (total + page_size - 1) // page_size,
     }
 
 
@@ -486,6 +495,7 @@ def report_by_category(
     user: User = Depends(get_current_user),
 ):
     q = db.query(
+        Category.id.label("category_id"),
         Category.name.label("category_name"),
         func.coalesce(func.sum(Transaction.amount), 0).label("total"),
     ).outerjoin(
@@ -501,9 +511,9 @@ def report_by_category(
     if transaction_type:
         q = q.filter(Transaction.transaction_type == transaction_type)
 
-    rows = q.group_by(Category.name).order_by(func.sum(Transaction.amount).desc().nullslast()).all()
+    rows = q.group_by(Category.id, Category.name).order_by(func.sum(Transaction.amount).desc().nullslast()).all()
 
-    return [{"category_name": r.category_name, "total": Decimal(str(r.total))} for r in rows]
+    return [{"category_id": r.category_id, "category_name": r.category_name, "total": Decimal(str(r.total))} for r in rows]
 
 
 @router.get("/api/finance/reports/by-initiator", response_model=List[InitiatorBreakdown], tags=["Reports"])
@@ -515,6 +525,7 @@ def report_by_initiator(
     user: User = Depends(get_current_user),
 ):
     q = db.query(
+        User.id.label("initiator_id"),
         User.full_name.label("initiator_name"),
         func.coalesce(func.sum(Transaction.amount), 0).label("total"),
     ).outerjoin(
@@ -531,9 +542,9 @@ def report_by_initiator(
     # Only show users who have at least one transaction
     q = q.having(func.sum(Transaction.amount) > 0)
 
-    rows = q.group_by(User.full_name).order_by(func.sum(Transaction.amount).desc()).all()
+    rows = q.group_by(User.id, User.full_name).order_by(func.sum(Transaction.amount).desc()).all()
 
-    return [{"initiator_name": r.initiator_name, "total": Decimal(str(r.total))} for r in rows]
+    return [{"initiator_id": r.initiator_id, "initiator_name": r.initiator_name, "total": Decimal(str(r.total))} for r in rows]
 
 
 @router.get("/api/finance/reports/export/excel", tags=["Reports"])

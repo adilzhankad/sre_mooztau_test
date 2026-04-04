@@ -181,41 +181,6 @@ def create_order(
     if not org:
         raise HTTPException(status_code=404, detail="Организация не найдена")
 
-    # Credit limit check for dealer organizations
-    if org.credit_limit is not None:
-        # Calculate total of unpaid orders
-        current_debt = db.query(
-            func.coalesce(func.sum(Order.total_amount), 0)
-        ).filter(
-            Order.organization_id == org_id,
-            Order.status.notin_([OrderStatus.COMPLETED, OrderStatus.REJECTED, OrderStatus.RETURNED]),
-        ).scalar()
-
-        current_paid = db.query(
-            func.coalesce(func.sum(Payment.amount), 0)
-        ).join(Order, Payment.order_id == Order.id).filter(
-            Order.organization_id == org_id,
-        ).scalar()
-
-        outstanding = Decimal(str(current_debt)) - Decimal(str(current_paid))
-
-        # Calculate new order total
-        new_total = sum(
-            Decimal(str(item.price_per_unit)) * Decimal(str(item.quantity))
-            if not item.total_price
-            else Decimal(str(item.total_price))
-            for item in payload.items
-        )
-
-        if outstanding + new_total > Decimal(str(org.credit_limit)):
-            raise HTTPException(
-                status_code=400,
-                detail=f"Превышен кредитный лимит организации. "
-                       f"Лимит: {org.credit_limit}, "
-                       f"Текущий долг: {outstanding}, "
-                       f"Сумма нового заказа: {new_total}",
-            )
-
     manager_id = user.id
     if user.role == UserRole.SUPER_ADMIN and hasattr(payload, "manager_id") and getattr(payload, "manager_id", None):
         manager_id = payload.manager_id

@@ -15,17 +15,17 @@ from database import Base
 # ---------------------------------------------------------------------------
 
 class UserRole(str, enum.Enum):
-    SUPER_ADMIN = "super_admin"
-    DEALER_ADMIN = "dealer_admin"
-    DEALER_MANAGER = "dealer_manager"
-    FACTORY_ADMIN = "factory_admin"
-    FACTORY_WORKER = "factory_worker"
+    SUPER_ADMIN = "SUPER_ADMIN"
+    DEALER_ADMIN = "DEALER_ADMIN"
+    DEALER_MANAGER = "DEALER_MANAGER"
+    FACTORY_ADMIN = "FACTORY_ADMIN"
+    FACTORY_WORKER = "FACTORY_WORKER"
 
 
 class OrgType(str, enum.Enum):
-    HQ = "hq"
-    BRANCH = "branch"
-    DEALER = "dealer"
+    HQ = "HQ"
+    BRANCH = "BRANCH"
+    DEALER = "DEALER"
 
 
 # ---------------------------------------------------------------------------
@@ -43,8 +43,6 @@ class Organization(Base):
     contact_email: Mapped[str] = mapped_column(String(200), default="")
     address: Mapped[str] = mapped_column(Text, default="")
     region: Mapped[str] = mapped_column(String(200), default="")
-    credit_limit = mapped_column(Numeric(15, 2), nullable=True)
-    balance = mapped_column(Numeric(15, 2), default=0)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
     users = relationship("User", back_populates="organization")

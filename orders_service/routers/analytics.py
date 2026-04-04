@@ -1,5 +1,5 @@
 from typing import Optional
-from datetime import date, timedelta
+from datetime import date
 from decimal import Decimal
 
 from fastapi import APIRouter, Depends, Query
@@ -24,57 +24,33 @@ def analytics_overview(
     user: User = Depends(require_super_admin),
 ):
     query = db.query(Order)
-    prev_query = db.query(Order)
 
     if date_from and date_to:
         query = query.filter(Order.order_date >= date_from, Order.order_date <= date_to)
-        # Previous period for growth calculation
-        period_length = (date_to - date_from).days
-        prev_from = date_from - timedelta(days=period_length)
-        prev_to = date_from - timedelta(days=1)
-        prev_query = prev_query.filter(Order.order_date >= prev_from, Order.order_date <= prev_to)
     elif date_from:
         query = query.filter(Order.order_date >= date_from)
-        prev_query = prev_query.filter(Order.order_date < date_from)
     elif date_to:
         query = query.filter(Order.order_date <= date_to)
-        prev_query = prev_query.filter(Order.order_date <= date_to)
 
     total_orders = query.count()
     total_revenue = query.with_entities(
         func.coalesce(func.sum(Order.total_amount), 0)
     ).scalar()
 
-    avg_check = Decimal("0")
+    avg_order_value = Decimal("0")
     if total_orders > 0:
-        avg_check = Decimal(str(total_revenue)) / total_orders
+        avg_order_value = Decimal(str(total_revenue)) / total_orders
 
-    # Previous period
-    prev_total_orders = prev_query.count()
-    prev_revenue = prev_query.with_entities(
-        func.coalesce(func.sum(Order.total_amount), 0)
-    ).scalar()
-
-    orders_growth = 0.0
-    if prev_total_orders > 0:
-        orders_growth = round(
-            ((total_orders - prev_total_orders) / prev_total_orders) * 100, 2
-        )
-
-    revenue_growth = 0.0
-    if prev_revenue and prev_revenue > 0:
-        revenue_growth = round(
-            float((Decimal(str(total_revenue)) - Decimal(str(prev_revenue))) / Decimal(str(prev_revenue)) * 100), 2
-        )
+    # Count distinct customers
+    total_customers = query.with_entities(
+        func.count(func.distinct(Order.client_phone))
+    ).scalar() or 0
 
     return {
         "total_orders": total_orders,
         "total_revenue": float(total_revenue),
-        "avg_check": float(avg_check),
-        "orders_growth": orders_growth,
-        "revenue_growth": revenue_growth,
-        "prev_total_orders": prev_total_orders,
-        "prev_revenue": float(prev_revenue),
+        "avg_order_value": float(avg_order_value),
+        "total_customers": total_customers,
     }
 
 
@@ -241,13 +217,12 @@ def analytics_dealers(
         Organization.id.label("org_id"),
         Organization.name.label("org_name"),
         Organization.region.label("region"),
-        Organization.credit_limit,
         func.count(Order.id).label("orders_count"),
         func.coalesce(func.sum(Order.total_amount), 0).label("total_revenue"),
     ).outerjoin(
         Order, Order.organization_id == Organization.id
     ).group_by(
-        Organization.id, Organization.name, Organization.region, Organization.credit_limit
+        Organization.id, Organization.name, Organization.region
     ).order_by(
         func.sum(Order.total_amount).desc().nullslast()
     ).all()
@@ -273,7 +248,6 @@ def analytics_dealers(
             "total_revenue": float(row.total_revenue),
             "total_paid": float(total_paid),
             "debt": debt,
-            "credit_limit": float(row.credit_limit) if row.credit_limit else None,
         })
 
     return result

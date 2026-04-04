@@ -1,16 +1,16 @@
 import enum
 from datetime import datetime
 
-from sqlalchemy import BigInteger, String, Boolean, DateTime, Numeric, Text
+from sqlalchemy import BigInteger, String, Boolean, DateTime, Text
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 
 from database import Base
 
 
 class OrgType(str, enum.Enum):
-    HQ = "hq"
-    BRANCH = "branch"
-    DEALER = "dealer"
+    HQ = "HQ"
+    BRANCH = "BRANCH"
+    DEALER = "DEALER"
 
 
 class Organization(Base):
@@ -24,8 +24,6 @@ class Organization(Base):
     contact_email: Mapped[str] = mapped_column(String(200), default="")
     address: Mapped[str] = mapped_column(Text, default="")
     region: Mapped[str] = mapped_column(String(200), default="")
-    credit_limit = mapped_column(Numeric(15, 2), nullable=True)
-    balance = mapped_column(Numeric(15, 2), default=0)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
     users = relationship("User", back_populates="organization")

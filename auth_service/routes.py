@@ -340,7 +340,6 @@ def create_organization(
         contact_email=body.contact_email,
         address=body.address,
         region=body.region,
-        credit_limit=body.credit_limit,
     )
     db.add(org)
     db.commit()

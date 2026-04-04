@@ -75,12 +75,18 @@ class TransactionOut(BaseModel):
     transaction_type: str
     amount: Decimal
     currency: str
+    account_id: Optional[int] = None
     account_name: Optional[str] = None
     comment: str
+    category_l1_id: Optional[int] = None
     category_l1_name: Optional[str] = None
+    category_l2_id: Optional[int] = None
     category_l2_name: Optional[str] = None
+    category_l3_id: Optional[int] = None
     category_l3_name: Optional[str] = None
+    category_l4_id: Optional[int] = None
     category_l4_name: Optional[str] = None
+    initiator_id: Optional[int] = None
     initiator_name: Optional[str] = None
     order_id: Optional[int] = None
     order_number: str
@@ -91,6 +97,9 @@ class TransactionOut(BaseModel):
 class TransactionListOut(BaseModel):
     count: int
     results: List[TransactionOut]
+    page: int
+    page_size: int
+    pages: int
 
 
 # ---------------------------------------------------------------------------
@@ -104,11 +113,13 @@ class ReportSummary(BaseModel):
 
 
 class CategoryBreakdown(BaseModel):
+    category_id: Optional[int] = None
     category_name: Optional[str] = None
     total: Decimal
 
 
 class InitiatorBreakdown(BaseModel):
+    initiator_id: Optional[int] = None
     initiator_name: Optional[str] = None
     total: Decimal
 

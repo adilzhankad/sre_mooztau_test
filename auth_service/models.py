@@ -1,16 +1,16 @@
 import enum
 from datetime import datetime
 
-from sqlalchemy import BigInteger, String, Boolean, DateTime, Numeric, Text, ForeignKey
+from sqlalchemy import BigInteger, String, Boolean, DateTime, Text, ForeignKey
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 
 from database import Base
 
 
 class OrgType(str, enum.Enum):
-    HQ = "hq"
-    BRANCH = "branch"
-    DEALER = "dealer"
+    HQ = "HQ"
+    BRANCH = "BRANCH"
+    DEALER = "DEALER"
 
 
 class Organization(Base):
@@ -24,17 +24,15 @@ class Organization(Base):
     contact_email: Mapped[str] = mapped_column(String(255), nullable=True)
     address: Mapped[str] = mapped_column(Text, nullable=True)
     region: Mapped[str] = mapped_column(String(255), nullable=True)
-    credit_limit: Mapped[float] = mapped_column(Numeric(15, 2), nullable=True)
-    balance: Mapped[float] = mapped_column(Numeric(15, 2), default=0, nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
 
 
 class UserRole(str, enum.Enum):
-    SUPER_ADMIN = "super_admin"
-    DEALER_ADMIN = "dealer_admin"
-    DEALER_MANAGER = "dealer_manager"
-    FACTORY_ADMIN = "factory_admin"
-    FACTORY_WORKER = "factory_worker"
+    SUPER_ADMIN = "SUPER_ADMIN"
+    DEALER_ADMIN = "DEALER_ADMIN"
+    DEALER_MANAGER = "DEALER_MANAGER"
+    FACTORY_ADMIN = "FACTORY_ADMIN"
+    FACTORY_WORKER = "FACTORY_WORKER"
 
 
 class User(Base):

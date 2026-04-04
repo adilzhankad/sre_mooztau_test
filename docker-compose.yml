@@ -21,8 +21,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    ports:
-      - "0.0.0.0:8004:8002"
+    expose:
+      - "8002"
     restart: unless-stopped
     command: >
       sh -c "sleep 3 && python seed.py && uvicorn main:app --host 0.0.0.0 --port 8002 --workers 2"
@@ -38,8 +38,8 @@ services:
         condition: service_healthy
       auth:
         condition: service_started
-    ports:
-      - "0.0.0.0:8001:8001"
+    expose:
+      - "8001"
     volumes:
       - ./data:/app/data
     restart: unless-stopped
@@ -56,11 +56,26 @@ services:
         condition: service_healthy
       auth:
         condition: service_started
-    ports:
-      - "0.0.0.0:8003:8003"
+    expose:
+      - "8003"
     restart: unless-stopped
     command: >
       sh -c "python seed.py && uvicorn main:app --host 0.0.0.0 --port 8003 --workers 2"
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_AUTH_API_URL: ""
+        VITE_ORDERS_API_URL: ""
+        VITE_FINANCE_API_URL: ""
+    ports:
+      - "0.0.0.0:3100:80"
+    depends_on:
+      - auth
+      - orders
+      - finance
+    restart: unless-stopped
 
   prometheus:
     image: prom/prometheus:v3.10.0

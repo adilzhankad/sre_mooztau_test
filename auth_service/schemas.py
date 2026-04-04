@@ -71,8 +71,6 @@ class OrgOut(BaseModel):
     contact_email: Optional[str] = None
     address: Optional[str] = None
     region: Optional[str] = None
-    credit_limit: Optional[float] = None
-    balance: float
     created_at: datetime
 
     class Config:
@@ -86,7 +84,6 @@ class OrgCreate(BaseModel):
     contact_email: Optional[str] = None
     address: Optional[str] = None
     region: Optional[str] = None
-    credit_limit: Optional[float] = None
 
 
 class OrgUpdate(BaseModel):
@@ -97,7 +94,6 @@ class OrgUpdate(BaseModel):
     contact_email: Optional[str] = None
     address: Optional[str] = None
     region: Optional[str] = None
-    credit_limit: Optional[float] = None
 
 
 # ── Me ────────────────────────────────────────────────────────────────────────

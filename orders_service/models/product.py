@@ -8,12 +8,12 @@ from database import Base
 
 
 class ProductCategory(str, enum.Enum):
-    BUILT_IN = "built_in"
-    OUTDOOR = "outdoor"
-    FREEZER = "freezer"
-    UNIT = "unit"
-    DOOR = "door"
-    WITHOUT_UNIT = "without_unit"
+    BUILT_IN = "BUILT_IN"
+    OUTDOOR = "OUTDOOR"
+    FREEZER = "FREEZER"
+    UNIT = "UNIT"
+    DOOR = "DOOR"
+    WITHOUT_UNIT = "WITHOUT_UNIT"
 
 
 class UnitType(str, enum.Enum):

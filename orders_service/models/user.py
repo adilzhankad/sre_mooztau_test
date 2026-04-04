@@ -8,11 +8,11 @@ from database import Base
 
 
 class UserRole(str, enum.Enum):
-    SUPER_ADMIN = "super_admin"
-    DEALER_ADMIN = "dealer_admin"
-    DEALER_MANAGER = "dealer_manager"
-    FACTORY_ADMIN = "factory_admin"
-    FACTORY_WORKER = "factory_worker"
+    SUPER_ADMIN = "SUPER_ADMIN"
+    DEALER_ADMIN = "DEALER_ADMIN"
+    DEALER_MANAGER = "DEALER_MANAGER"
+    FACTORY_ADMIN = "FACTORY_ADMIN"
+    FACTORY_WORKER = "FACTORY_WORKER"
 
 
 class User(Base):
