@@ -42,7 +42,6 @@ class OrderCreate(BaseModel):
     client_phone: str
     client_region: str
     client_address: str
-    factory: str = "Кулан"
     deadline: Optional[date] = None
     has_contract: bool = False
     items: List[OrderItemCreate]
@@ -61,7 +60,6 @@ class OrderUpdate(BaseModel):
     client_phone: Optional[str] = None
     client_region: Optional[str] = None
     client_address: Optional[str] = None
-    factory: Optional[str] = None
     deadline: Optional[date] = None
     has_contract: Optional[bool] = None
 

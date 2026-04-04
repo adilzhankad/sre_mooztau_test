@@ -3,7 +3,7 @@ from typing import Optional, List
 from datetime import date, datetime, timedelta
 from decimal import Decimal
 
-from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, status, Query
+from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.orm import Session, joinedload
 from sqlalchemy import func, or_
 
@@ -17,7 +17,6 @@ from schemas.order import (
     StatusChange, OrderHistoryOut, PaymentCreate, PaymentOut, OrderListOut,
 )
 from services.permissions import filter_orders_by_role, can_change_status
-from services.finance_client import create_auto_income
 from middleware.auth import get_current_user
 
 router = APIRouter(prefix="/api/orders", tags=["Orders"])
@@ -201,7 +200,7 @@ def create_order(
         contract_number=payload.contract_number,
         organization_id=org_id,
         manager_id=manager_id,
-        factory=payload.factory,
+        factory="Кулан",
         client_name=payload.client_name,
         client_phone=payload.client_phone,
         client_region=payload.client_region,
@@ -502,7 +501,6 @@ def get_order_payments(
 def add_payment(
     order_id: int,
     payload: PaymentCreate,
-    background_tasks: BackgroundTasks,
     db: Session = Depends(get_db),
     user: User = Depends(get_current_user),
 ):
@@ -550,17 +548,5 @@ def add_payment(
 
     db.commit()
     db.refresh(payment)
-
-    # Notify finance service (async, non-blocking)
-    background_tasks.add_task(
-        create_auto_income,
-        order_id=order.id,
-        order_number=order.order_number,
-        amount=float(payment.amount),
-        payment_date=str(payment.payment_date),
-        payment_method=payment.payment_method,
-        client_name=order.client_name,
-        organization_name=order.organization.name if order.organization else "",
-    )
 
     return payment

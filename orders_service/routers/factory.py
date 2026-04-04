@@ -190,15 +190,12 @@ def factory_dashboard(
 
 @router.get("/inventory", response_model=List[InventoryOut])
 def list_inventory(
-    factory: Optional[str] = None,
     model: Optional[str] = None,
     db: Session = Depends(get_db),
     user: User = Depends(require_factory),
 ):
     query = db.query(Inventory)
 
-    if factory:
-        query = query.filter(Inventory.factory == factory)
     if model:
         query = query.filter(Inventory.model.ilike(f"%{model}%"))
 
@@ -216,9 +213,8 @@ def add_inventory(
     if not product:
         raise HTTPException(status_code=404, detail="Продукт не найден")
 
-    # Check if inventory record already exists for this factory+product+color
     existing = db.query(Inventory).filter(
-        Inventory.factory == payload.factory,
+        Inventory.factory == "Кулан",
         Inventory.product_id == payload.product_id,
         Inventory.color == payload.color,
     ).first()
@@ -230,7 +226,7 @@ def add_inventory(
         return existing
 
     inv = Inventory(
-        factory=payload.factory,
+        factory="Кулан",
         product_id=payload.product_id,
         model=payload.model,
         color=payload.color,

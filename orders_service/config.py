@@ -11,7 +11,6 @@ class Settings(BaseSettings):
     JWT_ALGORITHM: str = "HS256"
     JWT_ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24  # 24 hours
     JWT_REFRESH_TOKEN_EXPIRE_DAYS: int = 30
-    FINANCE_SERVICE_URL: str = "http://localhost:8003"
 
     @property
     def database_url(self) -> str:

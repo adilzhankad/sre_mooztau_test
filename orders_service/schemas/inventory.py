@@ -4,7 +4,6 @@ from pydantic import BaseModel
 
 
 class InventoryCreate(BaseModel):
-    factory: str
     product_id: int
     model: str
     color: str = ""
