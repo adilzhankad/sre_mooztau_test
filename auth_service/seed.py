@@ -18,16 +18,16 @@ def seed():
     try:
         # ── Organizations ─────────────────────────────────────────────────
         organizations = [
-            {"name": "MoozTau", "org_type": "HQ", "region": "Алматы"},
-            {"name": "MT Астана", "org_type": "DEALER", "region": "Астана"},
-            {"name": "MT Алматы", "org_type": "BRANCH", "region": "Алматы"},
-            {"name": "Каспи Магазин", "org_type": "BRANCH", "region": "Алматы"},
-            {"name": "B2B", "org_type": "BRANCH", "region": "Алматы"},
-            {"name": "Ayza", "org_type": "DEALER", "region": "Шымкент"},
-            {"name": "Umag Шым", "org_type": "DEALER", "region": "Шымкент"},
-            {"name": "Umag Тараз", "org_type": "DEALER", "region": "Тараз"},
-            {"name": "Диллер Болат", "org_type": "DEALER", "region": "Астана"},
-            {"name": "Айзберг", "org_type": "DEALER", "region": "Алматы"},
+            {"name": "MoozTau", "org_type": "HQ", "region": "Алматы", "contact_phone": "", "contact_email": "", "address": ""},
+            {"name": "MT Астана", "org_type": "DEALER", "region": "Астана", "contact_phone": "", "contact_email": "", "address": ""},
+            {"name": "MT Алматы", "org_type": "BRANCH", "region": "Алматы", "contact_phone": "", "contact_email": "", "address": ""},
+            {"name": "Каспи Магазин", "org_type": "BRANCH", "region": "Алматы", "contact_phone": "", "contact_email": "", "address": ""},
+            {"name": "B2B", "org_type": "BRANCH", "region": "Алматы", "contact_phone": "", "contact_email": "", "address": ""},
+            {"name": "Ayza", "org_type": "DEALER", "region": "Шымкент", "contact_phone": "", "contact_email": "", "address": ""},
+            {"name": "Umag Шым", "org_type": "DEALER", "region": "Шымкент", "contact_phone": "", "contact_email": "", "address": ""},
+            {"name": "Umag Тараз", "org_type": "DEALER", "region": "Тараз", "contact_phone": "", "contact_email": "", "address": ""},
+            {"name": "Диллер Болат", "org_type": "DEALER", "region": "Астана", "contact_phone": "", "contact_email": "", "address": ""},
+            {"name": "Айзберг", "org_type": "DEALER", "region": "Алматы", "contact_phone": "", "contact_email": "", "address": ""},
         ]
 
         hq_org = None
