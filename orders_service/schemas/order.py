@@ -36,6 +36,15 @@ class OrderItemOut(BaseModel):
         from_attributes = True
 
 
+class OrderItemUpdate(BaseModel):
+    quantity: Optional[Decimal] = None
+    color: Optional[str] = None
+    price_per_unit: Optional[Decimal] = None
+    length: Optional[Decimal] = None
+    height: Optional[Decimal] = None
+    width: Optional[Decimal] = None
+
+
 class OrderCreate(BaseModel):
     contract_number: str = ""
     client_name: str

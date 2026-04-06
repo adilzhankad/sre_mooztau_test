@@ -13,7 +13,7 @@ from models.organization import Organization
 from models.order import Order, OrderItem, OrderHistory, OrderStatus
 from models.payment import Payment
 from schemas.order import (
-    OrderCreate, OrderUpdate, OrderOut, OrderItemOut,
+    OrderCreate, OrderUpdate, OrderOut, OrderItemOut, OrderItemUpdate,
     StatusChange, OrderHistoryOut, PaymentCreate, PaymentOut, OrderListOut,
 )
 from services.permissions import filter_orders_by_role, can_change_status
@@ -495,6 +495,62 @@ def get_order_payments(
         Payment.order_id == order_id
     ).order_by(Payment.payment_date.desc()).all()
     return payments
+
+
+@router.patch("/{order_id}/items/{item_id}", response_model=OrderItemOut)
+def update_order_item(
+    order_id: int,
+    item_id: int,
+    payload: OrderItemUpdate,
+    db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    order = db.query(Order).filter(Order.id == order_id).first()
+    if not order:
+        raise HTTPException(status_code=404, detail="Заказ не найден")
+
+    # Permission check
+    if user.role == UserRole.SUPER_ADMIN:
+        pass
+    elif user.role == UserRole.DEALER_ADMIN:
+        if order.organization_id != user.organization_id:
+            raise HTTPException(status_code=403, detail="Недостаточно прав")
+    elif user.role == UserRole.DEALER_MANAGER:
+        if order.manager_id != user.id:
+            raise HTTPException(status_code=403, detail="Недостаточно прав")
+    else:
+        raise HTTPException(status_code=403, detail="Недостаточно прав")
+
+    item = db.query(OrderItem).filter(
+        OrderItem.id == item_id, OrderItem.order_id == order_id,
+    ).first()
+    if not item:
+        raise HTTPException(status_code=404, detail="Позиция не найдена")
+
+    # Update fields
+    for field, value in payload.model_dump(exclude_unset=True).items():
+        setattr(item, field, value)
+
+    # Recalculate total_price
+    item.total_price = item.quantity * item.price_per_unit
+    db.flush()
+
+    # Recalculate order total
+    order.total_amount = sum(i.quantity * i.price_per_unit for i in order.items)
+
+    # History
+    db.add(OrderHistory(
+        order_id=order.id,
+        user_id=user.id,
+        action="item_updated",
+        old_value="",
+        new_value=f"{item.model}: {item.price_per_unit} x {item.quantity} = {item.total_price}",
+        note=f"Позиция {item.model} обновлена",
+    ))
+
+    db.commit()
+    db.refresh(item)
+    return item
 
 
 @router.post("/{order_id}/payments", response_model=PaymentOut, status_code=status.HTTP_201_CREATED)
