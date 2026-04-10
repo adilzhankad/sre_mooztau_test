@@ -81,7 +81,9 @@ def _user_to_out(user: User) -> UserOut:
 
 @router.post("/api/auth/login", response_model=TokenResponse)
 def login(body: LoginRequest, db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.phone == body.phone).first()
+    import re
+    normalized_phone = re.sub(r"[^\d+]", "", body.phone)
+    user = db.query(User).filter(User.phone == normalized_phone).first()
     if not user or not verify_password(body.password, user.password_hash):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid phone or password")
     if not user.is_active:

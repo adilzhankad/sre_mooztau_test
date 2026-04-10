@@ -45,22 +45,62 @@ def seed():
                     hq_org = existing
                 print(f"  Organization already exists: {org_data['name']}")
 
-        # ── Super Admin ───────────────────────────────────────────────────
-        admin_phone = "+77000000001"
-        existing_admin = db.query(User).filter(User.phone == admin_phone).first()
-        if not existing_admin:
-            admin = User(
-                organization_id=hq_org.id if hq_org else None,
-                role=UserRole.SUPER_ADMIN.value,
-                full_name="Администратор",
-                phone=admin_phone,
-                email="admin@mooztau.kz",
-                password_hash=hash_password("admin123"),
-            )
-            db.add(admin)
-            print(f"  Created super admin: {admin_phone} / admin123")
-        else:
-            print(f"  Super admin already exists: {admin_phone}")
+        # ── Users (one per role) ──────────────────────────────────────────
+        dealer_org = db.query(Organization).filter(Organization.name == "MT Астана").first()
+
+        seed_users = [
+            {
+                "phone": "+77000000001",
+                "role": UserRole.SUPER_ADMIN,
+                "full_name": "Администратор",
+                "email": "admin@mooztau.kz",
+                "organization": hq_org,
+            },
+            {
+                "phone": "+77000000002",
+                "role": UserRole.DEALER_ADMIN,
+                "full_name": "Дилер Админ",
+                "email": "dealer_admin@mooztau.kz",
+                "organization": dealer_org,
+            },
+            {
+                "phone": "+77000000003",
+                "role": UserRole.DEALER_MANAGER,
+                "full_name": "Дилер Менеджер",
+                "email": "dealer_manager@mooztau.kz",
+                "organization": dealer_org,
+            },
+            {
+                "phone": "+77000000004",
+                "role": UserRole.FACTORY_ADMIN,
+                "full_name": "Фабрика Админ",
+                "email": "factory_admin@mooztau.kz",
+                "organization": hq_org,
+            },
+            {
+                "phone": "+77000000005",
+                "role": UserRole.FACTORY_WORKER,
+                "full_name": "Фабрика Работник",
+                "email": "factory_worker@mooztau.kz",
+                "organization": hq_org,
+            },
+        ]
+
+        for u in seed_users:
+            existing = db.query(User).filter(User.phone == u["phone"]).first()
+            if not existing:
+                user = User(
+                    organization_id=u["organization"].id if u["organization"] else None,
+                    role=u["role"].value,
+                    full_name=u["full_name"],
+                    phone=u["phone"],
+                    email=u["email"],
+                    password_hash=hash_password("admin123"),
+                )
+                db.add(user)
+                print(f"  Created {u['role'].value}: {u['phone']} / admin123")
+            else:
+                print(f"  {u['role'].value} already exists: {u['phone']}")
 
         db.commit()
         print("\nSeed completed successfully.")
