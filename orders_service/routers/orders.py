@@ -45,10 +45,16 @@ def enrich_order(order: Order) -> dict:
         "factory": order.factory,
         "client_name": order.client_name,
         "client_phone": order.client_phone,
+        "client_iin": order.client_iin or "",
         "client_region": order.client_region,
         "client_address": order.client_address,
+        "delivery_address": order.delivery_address or "",
         "total_amount": total_amount,
+        "discount_percent": order.discount_percent or Decimal("0"),
+        "discount_amount": order.discount_amount or Decimal("0"),
+        "final_amount": order.final_amount or total_amount,
         "dealer_cost": order.dealer_cost,
+        "payment_type": order.payment_type or "",
         "order_date": order.order_date,
         "deadline": order.deadline,
         "accepted_date": order.accepted_date,
@@ -58,7 +64,7 @@ def enrich_order(order: Order) -> dict:
         "items": items,
         "payments": payments,
         "payment_received": total_paid,
-        "payment_remaining": total_amount - total_paid,
+        "payment_remaining": (order.final_amount or total_amount) - total_paid,
         "created_at": order.created_at,
         "updated_at": order.updated_at,
     }
@@ -187,13 +193,27 @@ def create_order(
     order_number = _generate_order_number(db)
     order_date = payload.order_date if hasattr(payload, "order_date") and payload.order_date else date.today()
 
-    # Calculate total_amount from items
+    # Calculate totals with discounts
     total_amount = Decimal("0")
+    order_discount_pct = Decimal(str(payload.discount_percent or 0))
+
     for item in payload.items:
-        if item.total_price:
-            total_amount += Decimal(str(item.total_price))
-        else:
-            total_amount += Decimal(str(item.price_per_unit)) * Decimal(str(item.quantity))
+        item_base = Decimal(str(item.price_per_unit)) * Decimal(str(item.quantity))
+        # Item-level discount takes priority, then order-level
+        item_disc_pct = Decimal(str(item.discount_percent or 0)) or order_discount_pct
+        item_disc_amt = Decimal(str(item.discount_amount or 0))
+        if item_disc_pct > 0 and item_disc_amt == 0:
+            item_disc_amt = (item_base * item_disc_pct / 100).quantize(Decimal("0.01"))
+        item_total = item_base - item_disc_amt
+        if item.total_price and item.total_price > 0:
+            item_total = Decimal(str(item.total_price))
+        total_amount += item_total
+
+    # Order-level discount
+    order_disc_amt = Decimal("0")
+    if order_discount_pct > 0:
+        order_disc_amt = (total_amount * order_discount_pct / 100).quantize(Decimal("0.01"))
+    final_amount = total_amount - order_disc_amt
 
     order = Order(
         order_number=order_number,
@@ -203,9 +223,15 @@ def create_order(
         factory="Кулан",
         client_name=payload.client_name,
         client_phone=payload.client_phone,
+        client_iin=payload.client_iin,
         client_region=payload.client_region,
         client_address=payload.client_address,
+        delivery_address=payload.delivery_address,
         total_amount=total_amount,
+        discount_percent=order_discount_pct,
+        discount_amount=order_disc_amt,
+        final_amount=final_amount,
+        payment_type=payload.payment_type,
         order_date=order_date,
         deadline=payload.deadline,
         has_contract=payload.has_contract,
@@ -216,9 +242,15 @@ def create_order(
 
     # Create order items
     for item_data in payload.items:
-        item_total = item_data.total_price if item_data.total_price else (
-            Decimal(str(item_data.price_per_unit)) * Decimal(str(item_data.quantity))
-        )
+        item_base = Decimal(str(item_data.price_per_unit)) * Decimal(str(item_data.quantity))
+        item_disc_pct = Decimal(str(item_data.discount_percent or 0)) or order_discount_pct
+        item_disc_amt = Decimal(str(item_data.discount_amount or 0))
+        if item_disc_pct > 0 and item_disc_amt == 0:
+            item_disc_amt = (item_base * item_disc_pct / 100).quantize(Decimal("0.01"))
+        item_total = item_base - item_disc_amt
+        if item_data.total_price and item_data.total_price > 0:
+            item_total = Decimal(str(item_data.total_price))
+
         order_item = OrderItem(
             order_id=order.id,
             product_id=item_data.product_id,
@@ -230,7 +262,10 @@ def create_order(
             height=item_data.height,
             width=item_data.width,
             color=item_data.color,
+            recommended_price=item_data.recommended_price,
             price_per_unit=item_data.price_per_unit,
+            discount_percent=item_disc_pct,
+            discount_amount=item_disc_amt,
             total_price=item_total,
         )
         db.add(order_item)
@@ -531,12 +566,18 @@ def update_order_item(
     for field, value in payload.model_dump(exclude_unset=True).items():
         setattr(item, field, value)
 
-    # Recalculate total_price
-    item.total_price = item.quantity * item.price_per_unit
+    # Recalculate item discount and total
+    item_base = item.quantity * item.price_per_unit
+    if item.discount_percent and item.discount_percent > 0:
+        item.discount_amount = (item_base * item.discount_percent / 100).quantize(Decimal("0.01"))
+    item.total_price = item_base - (item.discount_amount or 0)
     db.flush()
 
-    # Recalculate order total
-    order.total_amount = sum(i.quantity * i.price_per_unit for i in order.items)
+    # Recalculate order totals
+    order.total_amount = sum(i.total_price for i in order.items)
+    if order.discount_percent and order.discount_percent > 0:
+        order.discount_amount = (order.total_amount * order.discount_percent / 100).quantize(Decimal("0.01"))
+    order.final_amount = order.total_amount - (order.discount_amount or 0)
 
     # History
     db.add(OrderHistory(

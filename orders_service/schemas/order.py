@@ -14,7 +14,10 @@ class OrderItemCreate(BaseModel):
     height: Optional[Decimal] = None
     width: Optional[Decimal] = None
     color: str = ""
+    recommended_price: Decimal = Decimal("0")
     price_per_unit: Decimal = Decimal("0")
+    discount_percent: Decimal = Decimal("0")
+    discount_amount: Decimal = Decimal("0")
     total_price: Decimal = Decimal("0")
 
 
@@ -29,7 +32,10 @@ class OrderItemOut(BaseModel):
     height: Optional[Decimal]
     width: Optional[Decimal]
     color: str
+    recommended_price: Decimal
     price_per_unit: Decimal
+    discount_percent: Decimal
+    discount_amount: Decimal
     total_price: Decimal
 
     class Config:
@@ -39,7 +45,10 @@ class OrderItemOut(BaseModel):
 class OrderItemUpdate(BaseModel):
     quantity: Optional[Decimal] = None
     color: Optional[str] = None
+    recommended_price: Optional[Decimal] = None
     price_per_unit: Optional[Decimal] = None
+    discount_percent: Optional[Decimal] = None
+    discount_amount: Optional[Decimal] = None
     length: Optional[Decimal] = None
     height: Optional[Decimal] = None
     width: Optional[Decimal] = None
@@ -49,8 +58,12 @@ class OrderCreate(BaseModel):
     contract_number: str = ""
     client_name: str
     client_phone: str
+    client_iin: str = ""
     client_region: str
     client_address: str
+    delivery_address: str = ""
+    payment_type: str = ""
+    discount_percent: Decimal = Decimal("0")
     deadline: Optional[date] = None
     has_contract: bool = False
     items: List[OrderItemCreate]
@@ -67,8 +80,12 @@ class OrderUpdate(BaseModel):
     contract_number: Optional[str] = None
     client_name: Optional[str] = None
     client_phone: Optional[str] = None
+    client_iin: Optional[str] = None
     client_region: Optional[str] = None
     client_address: Optional[str] = None
+    delivery_address: Optional[str] = None
+    payment_type: Optional[str] = None
+    discount_percent: Optional[Decimal] = None
     deadline: Optional[date] = None
     has_contract: Optional[bool] = None
 
@@ -122,10 +139,16 @@ class OrderOut(BaseModel):
     factory: str
     client_name: str
     client_phone: str
+    client_iin: str
     client_region: str
     client_address: str
+    delivery_address: str
     total_amount: Decimal
+    discount_percent: Decimal
+    discount_amount: Decimal
+    final_amount: Decimal
     dealer_cost: Optional[Decimal]
+    payment_type: str
     order_date: date
     deadline: Optional[date]
     accepted_date: Optional[date]

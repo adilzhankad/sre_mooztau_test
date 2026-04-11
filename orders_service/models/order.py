@@ -34,12 +34,18 @@ class Order(Base):
     # Client info (ALL REQUIRED)
     client_name: Mapped[str] = mapped_column(String(200))
     client_phone: Mapped[str] = mapped_column(String(50))
+    client_iin: Mapped[str] = mapped_column(String(20), default="")
     client_region: Mapped[str] = mapped_column(String(200))
     client_address: Mapped[str] = mapped_column(Text)
+    delivery_address: Mapped[str] = mapped_column(Text, default="")
 
     # Financial
     total_amount = mapped_column(Numeric(15, 2), default=0)
+    discount_percent = mapped_column(Numeric(5, 2), default=0)
+    discount_amount = mapped_column(Numeric(15, 2), default=0)
+    final_amount = mapped_column(Numeric(15, 2), default=0)
     dealer_cost = mapped_column(Numeric(15, 2), nullable=True)
+    payment_type: Mapped[str] = mapped_column(String(50), default="")  # нал/безнал/Kaspi
 
     # Dates
     order_date = mapped_column(Date, nullable=False)
@@ -76,7 +82,10 @@ class OrderItem(Base):
     height = mapped_column(Numeric(10, 2), nullable=True)
     width = mapped_column(Numeric(10, 2), nullable=True)
     color: Mapped[str] = mapped_column(String(50), default="")
+    recommended_price = mapped_column(Numeric(15, 2), default=0)
     price_per_unit = mapped_column(Numeric(15, 2), default=0)
+    discount_percent = mapped_column(Numeric(5, 2), default=0)
+    discount_amount = mapped_column(Numeric(15, 2), default=0)
     total_price = mapped_column(Numeric(15, 2), default=0)
 
     order = relationship("Order", back_populates="items")
