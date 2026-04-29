@@ -22,6 +22,7 @@ import { QCQueuePage } from "@/pages/QCQueuePage";
 import { QCChecklistPage } from "@/pages/QCChecklistPage";
 import { LogisticsPage } from "@/pages/LogisticsPage";
 import { AuditPage } from "@/pages/AuditPage.tsx";
+import { GrafanaPage } from "@/pages/GrafanaPage";
 import { ChatPage } from "@/pages/ChatPage";
 import { ServicePage } from "@/pages/ServicePage";
 import { MasterDeliveriesPage } from "@/pages/MasterDeliveriesPage";
@@ -103,6 +104,7 @@ export function App() {
         <Route element={<ProtectedRoute allowedRoles={["SUPER_ADMIN"]} redirectTo="/orders" />}>
           <Route element={<TabLayout />}>
             <Route path="audit" element={<AuditPage />} />
+            <Route path="monitoring" element={<GrafanaPage />} />
           </Route>
         </Route>
 
