@@ -21,6 +21,6 @@ receivers:
           *Сервис:* {{ .Labels.job }}
           *Алерт:* {{ .Labels.alertname }}
           *Описание:* {{ .Annotations.description }}
-          *Время:* {{ .StartsAt.Format "02.01.2006 15:04:05" }}
+          *Время:* {{ .StartsAt.Local.Format "02.01.2006 15:04:05" }} (UTC+5)
           {{ end }}
         parse_mode: 'Markdown'

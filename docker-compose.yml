@@ -211,6 +211,8 @@ services:
 
   alertmanager:
     image: prom/alertmanager:v0.27.0
+    environment:
+      TZ: Asia/Almaty
     volumes:
       - ./monitoring/alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
     command:
