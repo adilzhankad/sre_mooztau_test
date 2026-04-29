@@ -162,29 +162,31 @@ def factory_dashboard(
     db: Session = Depends(get_db),
     user: User = Depends(require_factory),
 ):
-    confirmed_count = db.query(func.count(Order.id)).filter(
+    qc_review = db.query(func.count(Order.id)).filter(
         Order.status == OrderStatus.CONFIRMED
     ).scalar() or 0
 
-    in_production = db.query(func.count(Order.id)).filter(
+    in_progress = db.query(func.count(Order.id)).filter(
         Order.status == OrderStatus.IN_PRODUCTION
     ).scalar() or 0
 
-    ready = db.query(func.count(Order.id)).filter(
+    qc_passed = db.query(func.count(Order.id)).filter(
         Order.status == OrderStatus.READY
     ).scalar() or 0
 
-    shipped = db.query(func.count(Order.id)).filter(
+    waiting_courier = db.query(func.count(Order.id)).filter(
         Order.status == OrderStatus.SHIPPING
     ).scalar() or 0
 
-    total_orders = confirmed_count + in_production + ready + shipped
+    total_orders = qc_review + in_progress + qc_passed + waiting_courier
 
     return {
         "total_orders": total_orders,
-        "in_production": in_production,
-        "ready": ready,
-        "shipped": shipped,
+        "in_progress": in_progress,
+        "qc_review": qc_review,
+        "qc_passed": qc_passed,
+        "qc_rejected": 0,
+        "waiting_courier": waiting_courier,
     }
 
 

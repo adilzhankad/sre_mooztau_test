@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from prometheus_fastapi_instrumentator import Instrumentator
 
-from routers import products, prices, orders, factory, analytics
+from routers import products, prices, orders, factory, analytics, references, audit
 
 app = FastAPI(
     title="MoozTau Orders Service API",
@@ -28,6 +28,8 @@ app.include_router(prices.router)
 app.include_router(orders.router)
 app.include_router(factory.router)
 app.include_router(analytics.router)
+app.include_router(references.router)
+app.include_router(audit.router)
 
 
 @app.get("/health")
