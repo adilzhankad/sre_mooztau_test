@@ -6,10 +6,21 @@ route:
   group_wait: 30s
   group_interval: 5m
   repeat_interval: 4h
-  receiver: 'default'
+  receiver: 'telegram'
 
 receivers:
-  - name: 'default'
-    webhook_configs:
-      - url: 'http://host.docker.internal:5001/webhook'
+  - name: 'telegram'
+    telegram_configs:
+      - bot_token: '8035938463:AAHnTVjXBugT5dXKwuQdCPwoMGmllV2SZ5Q'
+        chat_id: 1092017156
         send_resolved: true
+        message: |
+          {{ if eq .Status "firing" }}🔴 ИНЦИДЕНТ{{ else }}✅ ВОССТАНОВЛЕНО{{ end }}
+
+          {{ range .Alerts }}
+          *Сервис:* {{ .Labels.job }}
+          *Алерт:* {{ .Labels.alertname }}
+          *Описание:* {{ .Annotations.description }}
+          *Время:* {{ .StartsAt.Format "02.01.2006 15:04:05" }}
+          {{ end }}
+        parse_mode: 'Markdown'
