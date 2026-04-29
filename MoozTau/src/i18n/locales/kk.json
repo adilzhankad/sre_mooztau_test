@@ -1,0 +1,446 @@
+{
+  "common": {
+    "back": "Артқа",
+    "cancel": "Бас тарту",
+    "save": "Сақтау",
+    "delete": "Жою",
+    "edit": "Өңдеу",
+    "confirm": "Растау",
+    "loading": "Жүктелуде...",
+    "retry": "Қайталау",
+    "search": "Іздеу",
+    "yes": "Иә",
+    "no": "Жоқ",
+    "dash": "—"
+  },
+  "login": {
+    "brandTagline": "Мұздату жабдығын өндіру мен сатуды басқару",
+    "brandTaglineShort": "Өндірісті басқару",
+    "title": "Жүйеге кіру",
+    "subtitle": "MoozTau-ға кіру үшін деректерді енгізіңіз",
+    "phoneLabel": "Телефон нөмірі",
+    "phonePlaceholder": "+7 (___) ___ __ __",
+    "passwordLabel": "Құпиясөз",
+    "passwordPlaceholder": "••••••••",
+    "submit": "Кіру",
+    "submitting": "Кіру...",
+    "forgotPassword": "Құпиясөзді ұмыттыңыз ба?",
+    "reset": {
+      "title": "Құпиясөзді қалпына келтіру",
+      "stepPhone": "Телефон",
+      "stepCode": "Код",
+      "stepPassword": "Құпиясөз",
+      "phoneHint": "Аккаунтқа байланған телефон нөмірін енгізіңіз.",
+      "sendCode": "Кодты жіберу",
+      "sending": "Жіберілуде...",
+      "codeHint": "Код <1>{{phone}}</1> нөміріне жіберілді. Төменде енгізіңіз.",
+      "codeLabel": "6-таңбалы код",
+      "codePlaceholder": "000000",
+      "confirm": "Растау",
+      "resend": "Қайта жіберу",
+      "newPasswordHint": "Жаңа құпиясөз ойлап табыңыз.",
+      "newPasswordLabel": "Жаңа құпиясөз",
+      "repeatPasswordLabel": "Құпиясөзді қайталаңыз",
+      "savePassword": "Құпиясөзді сақтау",
+      "saving": "Сақталуда...",
+      "successMessage": "Құпиясөз өзгертілді! Қайта бағытталуда…",
+      "errors": {
+        "sendFailed": "Код жіберу қатесі",
+        "resetFailed": "Құпиясөзді қалпына келтіру қатесі",
+        "codeLength": "6-таңбалы кодты енгізіңіз",
+        "passwordMismatch": "Құпиясөздер сәйкес келмейді",
+        "passwordTooShort": "Кемінде 6 таңба"
+      }
+    }
+  },
+  "language": {
+    "label": "Тіл",
+    "ru": "Русский",
+    "kk": "Қазақша",
+    "en": "English"
+  },
+  "role": {
+    "SUPER_ADMIN": "Суперадминистратор",
+    "DEALER_ADMIN": "Дилер әкімшісі",
+    "DEALER_MANAGER": "Дилер менеджері",
+    "USER": "Клиент",
+    "FACTORY_ADMIN": "Зауыт әкімшісі",
+    "FACTORY_WORKER": "Зауыт жұмыскері",
+    "QC_INSPECTOR": "Сапа инспекторы",
+    "LOGISTICS": "Логист",
+    "BUYER": "Сатып алушы",
+    "MASTER": "Сервис шебері",
+    "fallback": "Пайдаланушы"
+  },
+  "orgType": {
+    "HQ": "Бас офис",
+    "BRANCH": "Филиал",
+    "DEALER": "Дилер",
+    "fallback": "Ұйым"
+  },
+  "orderStatus": {
+    "analysis": "Талдау",
+    "in_progress": "Жұмыста",
+    "qc_review": "QC тексеру",
+    "qc_passed": "QC өтті",
+    "qc_rejected": "QC қайтарылды",
+    "waiting_courier": "Курьерді күту",
+    "matching": "Шеберді іздеу",
+    "master_selected": "Шебер тағайындалды",
+    "in_transit": "Жолда",
+    "accepted": "Клиент қабылдады",
+    "completed": "Аяқталды",
+    "returned": "Қайтарылды",
+    "cancelled": "Болдырылмады",
+    "rejected": "Қабылданбады"
+  },
+  "paymentStatus": {
+    "partial": "Ішінара орындалды",
+    "returned": "Тауар қайтарылды",
+    "prepaid": "Алдын ала төлем алынды",
+    "paid": "Төленді"
+  },
+  "buyerStatus": {
+    "analysis": "Жұмыста",
+    "in_progress": "Жұмыста",
+    "qc_review": "Жұмыста",
+    "qc_passed": "Жұмыста",
+    "qc_rejected": "Жұмыста",
+    "waiting_courier": "Жөнелтуге дайын",
+    "matching": "Шеберді іздеу",
+    "master_selected": "Шебер тағайындалды",
+    "in_transit": "Жолда",
+    "accepted": "Клиент қабылдады",
+    "completed": "Аяқталды",
+    "returned": "Қайтарылды",
+    "cancelled": "Болдырылмады",
+    "rejected": "Қабылданбады",
+    "stepper": {
+      "in_work": "Жұмыста",
+      "ready_to_ship": "Жөнелтуге дайын",
+      "in_transit": "Жолда",
+      "completed": "Аяқталды"
+    }
+  },
+  "profile": {
+    "kicker": "Жеке кабинет",
+    "accountActive": "Аккаунт белсенді",
+    "accountInactive": "Аккаунт өшірілген",
+    "editButton": "Профильді өңдеу",
+    "fallbackName": "Пайдаланушы",
+    "fallbackOrg": "Ұйым көрсетілмеген",
+    "loading": "Профиль жүктелуде...",
+    "stats": {
+      "teammates": "Командада",
+      "teammatesHint": "Ұйымыңыздағы қызметкерлер саны",
+      "active": "Белсенді",
+      "activeHint": "Қазір белсенді қол жеткізімі бар қызметкерлер",
+      "memberSince": "Бізбен бірге",
+      "memberSinceHint": "Жүйеде профиліңіз жасалған күн",
+      "channelType": "Арна түрі",
+      "channelTypeHint": "MoozTau құрылымындағы ұйымыңыздың рөлі"
+    },
+    "contacts": {
+      "title": "Байланыстар",
+      "description": "Авторизация мен хабарландыруларда қолданылатын негізгі деректер.",
+      "action": "Өзгерту",
+      "fullName": "Аты-жөні",
+      "phone": "Телефон",
+      "email": "Email",
+      "role": "Рөл"
+    },
+    "organization": {
+      "title": "Ұйым",
+      "description": "Құрылымыңыз бен байланыс деректерінің қысқаша мәліметі.",
+      "name": "Атауы",
+      "type": "Түрі",
+      "region": "Аймақ",
+      "address": "Мекенжай",
+      "phone": "Телефон",
+      "email": "Email",
+      "connected": "Қосылған"
+    },
+    "preferences": {
+      "title": "Баптаулар",
+      "description": "Жұмыс орныңызға арналған жергілікті интерфейс баптаулары.",
+      "compactMode": "Ықшам режим",
+      "compactModeDesc": "Шегіністерді азайтып, бетті тығыздайды.",
+      "notifications": "Еске салғыштар мен хабарландырулар",
+      "notificationsDesc": "Жергілікті хабарландыруларды белсенді қалдырады."
+    },
+    "security": {
+      "title": "Қауіпсіздік",
+      "description": "Кіру, қол жеткізу және жылдам әрекеттерді басқару.",
+      "changePassword": "Құпиясөзді өзгерту",
+      "logout": "Аккаунттан шығу"
+    }
+  },
+  "nav": {
+    "orders": "Тапсырыстар",
+    "products": "Каталог",
+    "factory": "Зауыт",
+    "qc": "QC кезегі",
+    "logistics": "Логистика",
+    "service": "Сервис",
+    "deliveries": "Жеткізулер",
+    "analytics": "Аналитика",
+    "finances": "Қаржы",
+    "audit": "Аудит",
+    "chat": "Чат",
+    "users": "Қызметкерлер",
+    "organizations": "Ұйымдар",
+    "profile": "Профиль",
+    "work": "Жұмыс",
+    "reports": "Есептер",
+    "admin": "Басқару",
+    "searchPlaceholder": "Іздеу...",
+    "notifications": "Хабарландырулар",
+    "expandMenu": "Мәзірді ашу",
+    "collapseMenu": "Мәзірді жабу",
+    "logout": "Шығу"
+  },
+  "theme": {
+    "light": "Жарық",
+    "dark": "Қараңғы",
+    "switchToLight": "Жарық тақырыпты қосу",
+    "switchToDark": "Қараңғы тақырыпты қосу"
+  },
+  "buyerNav": {
+    "home": "Басты",
+    "messages": "Хабарламалар",
+    "profile": "Профиль",
+    "orders": "Тапсырыстар",
+    "ordersHint": "Менің сатып алуларым",
+    "service": "Сервис",
+    "serviceHint": "Қолдау"
+  },
+  "emptyState": {
+    "errorTitle": "Жүктеу қатесі",
+    "errorDescription": "Деректерді жүктеу мүмкін болмады",
+    "retry": "Қайталау"
+  },
+  "serviceStatus": {
+    "new": "Құрылды",
+    "matching": "Шеберді іздеу",
+    "master_selected": "Шебер тағайындалды",
+    "approval_pending": "Растауды күтуде",
+    "approved": "Расталды",
+    "in_progress": "Жұмыста",
+    "waiting_parts": "Бөлшектерді күтудеміз",
+    "completed": "Аяқталды",
+    "closed": "Жабылды",
+    "cancelled": "Болдырылмады"
+  },
+  "matching": {
+    "blockTitle": "Шебер",
+    "modeStandard": "Стандартты жеткізу",
+    "modeMatching": "Шебер тағайындау арқылы жеткізу",
+    "noMaster": "Шебер әлі тағайындалмады",
+    "matchingInProgress": "Шебер іздеу жүруде",
+    "matchingStartedAt": "Іздеу басталды",
+    "masterSelectedAt": "Шебер таңдалды",
+    "masterName": "Шебер",
+    "masterPhone": "Шебер телефоны",
+    "startMatching": "Іздеуді бастау",
+    "selectMaster": "Шеберді таңдау",
+    "changeMaster": "Шеберді ауыстыру",
+    "selectMasterTitle": "Шеберді таңдау",
+    "selectMasterPlaceholder": "Шеберді таңдаңыз...",
+    "noActiveMasters": "Белсенді шеберлер жоқ",
+    "confirmSelect": "Тағайындау",
+    "starting": "Іске қосу...",
+    "selecting": "Тағайындау...",
+    "noteOptional": "Түсініктеме (міндетті емес)",
+    "needsMasterHint": "Алдымен шеберді таңдаңыз",
+    "selfAssignBlocked": "Өзіңізді таңдау мүмкін емес"
+  },
+  "masterCabinet": {
+    "title": "Менің тапсырыстарым",
+    "tabs": {
+      "active": "Белсенді",
+      "available": "Ашық аукциондар",
+      "completed": "Аяқталған"
+    },
+    "empty": {
+      "active": "Белсенді жеткізу жоқ",
+      "available": "Ашық аукциондар жоқ",
+      "completed": "Аяқталған жеткізулер әлі жоқ"
+    },
+    "accept": "Тапсырысты қабылдау",
+    "deliver": "Жеткізілді",
+    "accepting": "Қабылдануда...",
+    "delivering": "Аяқталуда...",
+    "addressLabel": "Мекенжай",
+    "clientLabel": "Клиент",
+    "phoneLabel": "Телефон",
+    "deadlineLabel": "Соңғы мерзім",
+    "matchingStartedAt": "Іздеу басталды"
+  },
+  "ordersErrors": {
+    "matching_must_select_master": "Алдымен шеберді таңдаңыз",
+    "not_fully_paid": "Тапсырыс толық төленбеген",
+    "not_waiting_courier": "Тапсырыс курьерді күту мәртебесінде емес",
+    "not_in_matching": "Тапсырыс іздеу кезеңінде емес",
+    "matching_needs_master": "Алдымен шеберді таңдаңыз",
+    "not_a_master": "Таңдалған пайдаланушы — шебер емес",
+    "cannot_self_assign": "Өзіңізді тағайындай алмайсыз",
+    "master_inactive": "Шебер белсенді емес",
+    "master_already_assigned": "Шебер тағайындалған — іздеуді қайта ашыңыз",
+    "not_assigned_master": "Бұл сіздің тапсырмаңыз емес",
+    "service_invalid_transition": "Жарамсыз мәртебе ауысуы",
+    "users_not_found": "Пайдаланушы табылмады",
+    "fallback": "Қате орын алды, кейінірек қайталап көріңіз"
+  },
+  "productCategory": {
+    "all": "Барлығы",
+    "BUILT_IN": "Кірістірме",
+    "OUTDOOR": "Сыртқы",
+    "UNIT": "Агрегат",
+    "DOOR": "Есіктер",
+    "WITHOUT_UNIT": "Панельдер",
+    "FREEZER": "Мұздатқыш"
+  },
+  "ordersPage": {
+    "title": "Тапсырыстар",
+    "newOrder": "Жаңа тапсырыс",
+    "tabs": { "active": "Белсенді", "archive": "Мұрағат" },
+    "quick": {
+      "today": "Бүгін",
+      "inProgress": "Жұмыста",
+      "delayed": "Кешікті",
+      "paid": "Төленді"
+    },
+    "searchPlaceholder": "Нөмір, есім, телефон бойынша іздеу...",
+    "filters": {
+      "statuses": "Статустар",
+      "allStatuses": "Барлық статустар",
+      "channels": "Арналар",
+      "allChannels": "Барлық арналар",
+      "clearAll": "Тазалау",
+      "removeFilter": "Сүзгіні жою"
+    },
+    "sort": {
+      "newest": "Алдымен жаңалары",
+      "oldest": "Алдымен ескілері",
+      "amountDesc": "Сомасы (кему)",
+      "amountAsc": "Сомасы (өсу)"
+    },
+    "found": "Табылды",
+    "loadError": "Жүктеу қатесі",
+    "emptyTitle": "Тапсырыстар жоқ",
+    "emptyDescFiltered": "Сүзгі параметрлерін өзгертіңіз",
+    "emptyDescEmpty": "Алғашқы тапсырыс жасаңыз",
+    "table": {
+      "order": "Тапсырыс",
+      "client": "Клиент",
+      "amount": "Сома",
+      "status": "Статус",
+      "payment": "Төлем",
+      "deadline": "Мерзім",
+      "action": "Әрекет",
+      "items": "Заттар",
+      "due": "Қалды"
+    },
+    "deadline": {
+      "today": "бүгін",
+      "daysLeft": "{{count}} күн",
+      "overdue": "кешікті {{count}} күн",
+      "overdueShort": "-{{count}} күн"
+    }
+  },
+  "productsPage": {
+    "kicker": "MoozTau каталогы",
+    "title": "Салқындатқыш жабдық және жинақтауыштар",
+    "subtitle": "Фото, санаттар, бағалар және ассортиментті басқару — бір жерде.",
+    "newProduct": "+ Жаңа тауар",
+    "stats": {
+      "total": "Барлығы",
+      "active": "Белсенді",
+      "inactive": "Жасырылған"
+    },
+    "searchPlaceholder": "Модель, атау немесе сипаттама бойынша іздеу...",
+    "filters": {
+      "active": "Тек белсенділер",
+      "all": "Барлығы",
+      "inactive": "Жасырылған"
+    },
+    "card": {
+      "noDescription": "Сипаттама әлі толтырылмаған",
+      "priceLabel": "Баға",
+      "priceEmpty": "Баға белгіленбеген",
+      "unitLabel": "Өлш. бір.",
+      "statusActive": "Белсенді",
+      "statusInactive": "Жасырылған",
+      "edit": "Өңдеу",
+      "delete": "Жою"
+    },
+    "empty": {
+      "title": "Каталог әзірге бос",
+      "description": "Сүзгілерді өзгертіп көріңіз немесе каталогқа жаңа тауар қосыңыз."
+    },
+    "modal": {
+      "createTitle": "Жаңа тауар",
+      "editTitle": "Тауарды өңдеу",
+      "subtitle": "Тауар картасын және каталогтың ағымдағы бағасын басқару.",
+      "fields": {
+        "model": "Модель *",
+        "name": "Атауы *",
+        "category": "Санат",
+        "unit": "Өлш. бірлігі",
+        "description": "Сипаттама",
+        "imageUrl": "Сурет URL-і",
+        "imageUrlPlaceholder": "https://...",
+        "colors": "Қолжетімді түстер",
+        "colorsPlaceholder": "Ақ, Күміс, Антрацит",
+        "length": "Ұзындығы",
+        "height": "Биіктігі",
+        "width": "Ені"
+      },
+      "priceSection": "Ағымдағы баға",
+      "prices": { "dealer": "Dealer", "recommended": "Ұсынылатын", "perMeter": "Бір метрге" },
+      "activeCheckbox": "Тауарды белсенді каталогта көрсету",
+      "cancel": "Болдырмау",
+      "create": "Тауар жасау",
+      "save": "Өзгерістерді сақтау",
+      "saving": "Сақталуда...",
+      "requiredFields": "Модель мен атауды толтырыңыз"
+    },
+    "confirmDelete": "{{model}} тауарын жою ма?"
+  },
+  "servicePage": {
+    "kicker": "Сервис",
+    "title": "Сервистік өтінімдер",
+    "titleMaster": "Менің сервистік өтінімдерім",
+    "newRequest": "+ Жаңа өтінім",
+    "accessDenied": {
+      "title": "Қолжетімсіз",
+      "description": "Сервис бөлімі әкімшілік, менеджерлер мен шеберлерге қолжетімді."
+    },
+    "stats": {
+      "total": "Барлығы",
+      "new": "Жаңа",
+      "inProgress": "Жұмыста",
+      "waiting": "Бөлшек күтудеміз",
+      "completed": "Аяқталған"
+    },
+    "tabs": {
+      "mine": "Менікі",
+      "available": "Қолжетімді",
+      "all": "Барлығы",
+      "active": "Белсенді",
+      "done": "Аяқталған"
+    },
+    "searchPlaceholder": "Клиент, тикет, телефон бойынша іздеу…",
+    "allStatuses": "Барлық статустар",
+    "empty": {
+      "mine": "Сіздің әзірге жұмыстағы өтінімдеріңіз жоқ",
+      "available": "Бос өтінімдер жоқ",
+      "default": "Сервистік өтінімдер әзірге жоқ"
+    },
+    "viewAvailable": "Қолжетімділерді көру",
+    "warranty": "Кепілдік",
+    "noVisitDate": "Бару күні тағайындалмаған",
+    "takeInWork": "Жұмысқа алу",
+    "noMasterAssigned": "Шебер тағайындалмаған"
+  }
+}

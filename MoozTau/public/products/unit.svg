@@ -1,0 +1,16 @@
+<svg width="800" height="600" viewBox="0 0 800 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="600" fill="#F8FAFC"/>
+  <rect x="150" y="130" width="500" height="300" rx="28" fill="#E2E8F0" stroke="#64748B" stroke-width="10"/>
+  <circle cx="295" cy="280" r="86" fill="#CBD5E1" stroke="#475569" stroke-width="10"/>
+  <circle cx="295" cy="280" r="54" fill="#94A3B8"/>
+  <path d="M295 194V366" stroke="#475569" stroke-width="8"/>
+  <path d="M209 280H381" stroke="#475569" stroke-width="8"/>
+  <path d="M234 219L356 341" stroke="#475569" stroke-width="8"/>
+  <path d="M356 219L234 341" stroke="#475569" stroke-width="8"/>
+  <rect x="440" y="185" width="135" height="42" rx="10" fill="#0F172A"/>
+  <rect x="440" y="248" width="135" height="18" rx="9" fill="#94A3B8"/>
+  <rect x="440" y="283" width="135" height="18" rx="9" fill="#94A3B8"/>
+  <rect x="440" y="318" width="135" height="18" rx="9" fill="#94A3B8"/>
+  <rect x="200" y="455" width="400" height="18" rx="9" fill="#CBD5E1"/>
+  <text x="70" y="548" fill="#0F172A" font-size="34" font-family="Arial, sans-serif" font-weight="700">COOLING UNIT</text>
+</svg>

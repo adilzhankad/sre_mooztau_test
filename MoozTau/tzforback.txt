@@ -1,0 +1,207 @@
+============================================================
+  ТЗ ДЛЯ BACKEND — Страница заказов (OrdersPage)
+  Дата: 2026-04-15
+============================================================
+
+Фронтенд уже подключён к API. Ниже — что именно отправляет
+фронтенд и что ожидает в ответ. Бэкенду нужно поддержать
+новые параметры и эндпоинты.
+
+Base URL: VITE_ORDERS_API_URL (по умолчанию http://localhost:8001)
+
+
+═══════════════════════════════════════════════════════════
+  1. GET /api/orders/  —  Список заказов (ОБНОВИТЬ)
+═══════════════════════════════════════════════════════════
+
+Фронтенд отправляет:
+  GET /api/orders/?search=МТ&status=in_work&sales_channel=Каспи+Магазин&ordering=-order_date&organization_id=1&manager_id=5&page=1&page_size=20
+
+СУЩЕСТВУЮЩИЕ параметры (уже работают):
+  - search        — поиск по order_number, client_name, client_phone
+  - status        — фильтр по статусу заказа
+  - organization_id — фильтр по организации
+  - manager_id    — фильтр по менеджеру
+  - page          — номер страницы
+  - page_size     — кол-во на странице (default: 20)
+
+НОВЫЕ параметры (нужно добавить):
+  - sales_channel — фильтр по каналу продаж (точное совпадение)
+      WHERE sales_channel = :sales_channel
+  - ordering      — сортировка, строка с направлением
+      Допустимые значения:
+        -order_date    → ORDER BY order_date DESC (дефолт)
+        order_date     → ORDER BY order_date ASC
+        -total_amount  → ORDER BY total_amount DESC
+        total_amount   → ORDER BY total_amount ASC
+      Префикс "-" = DESC, без префикса = ASC
+      Если не передан — сортировка по -order_date
+
+Ожидаемый ответ (уже работает, не менять формат):
+  {
+    "count": 142,
+    "results": [ Order, Order, ... ],
+    "page": 1,
+    "page_size": 20,
+    "pages": 8
+  }
+
+Каждый Order ДОЛЖЕН содержать:
+  - items: OrderItem[]         ← массив товаров (нужен для отображения)
+  - payment_received: number   ← сколько оплачено
+  - payment_remaining: number  ← сколько осталось
+  - total_amount: number       ← общая сумма
+  - deadline: string | null    ← дедлайн (для отображения таймера)
+  - sales_channel: string|null ← канал продаж
+
+ВАЖНО: items должен приходить в списке заказов, а не только
+в детальном GET /api/orders/:id. Если сейчас items не приходит
+в списке — нужно добавить. Хотя бы краткую версию:
+  items: [{ id, model, category, quantity, unit, price_per_unit, total_price }]
+
+
+═══════════════════════════════════════════════════════════
+  2. GET /api/references/sales-channels  —  Каналы продаж
+═══════════════════════════════════════════════════════════
+
+Фронтенд отправляет:
+  GET /api/references/sales-channels
+
+Ожидаемый ответ — простой массив строк:
+  ["B2B", "Каспи Магазин", "MoozTau", "МТ Алматы", "МТ Астана", ...]
+
+Уже существует. Просто убедиться что работает.
+
+
+═══════════════════════════════════════════════════════════
+  3. GET /api/analytics/orders  —  Счётчики по статусам (ВАЖНО)
+═══════════════════════════════════════════════════════════
+
+Фронтенд отправляет:
+  GET /api/analytics/orders
+  GET /api/analytics/orders?sales_channel=Каспи+Магазин
+
+Параметр sales_channel ОБЯЗАТЕЛЕН к поддержке — фронтенд
+отправляет его когда пользователь выбирает канал продаж.
+Тогда счётчики статусов показывают числа ВНУТРИ этого канала.
+
+Ожидаемый ответ — массив объектов:
+  [
+    { "status": "analysis",         "count": 12 },
+    { "status": "in_work",          "count": 8  },
+    { "status": "approval",         "count": 3  },
+    { "status": "awaiting_courier", "count": 2  },
+    { "status": "in_transit",       "count": 5  },
+    { "status": "delivered",        "count": 7  },
+    { "status": "accepted",         "count": 4  },
+    { "status": "completed",        "count": 31 },
+    { "status": "rejected",         "count": 1  }
+  ]
+
+SQL (без фильтра):
+  SELECT status, COUNT(*) as count
+  FROM orders
+  GROUP BY status;
+
+SQL (с фильтром sales_channel):
+  SELECT status, COUNT(*) as count
+  FROM orders
+  WHERE sales_channel = :sales_channel
+  GROUP BY status;
+
+Параметры:
+  - sales_channel  — ОБЯЗАТЕЛЬНО, фильтр по каналу продаж
+  - organization_id — опционально
+  - manager_id      — опционально
+
+ВАЖНО:
+  - Возвращать ВСЕ 9 статусов, даже если count = 0
+  - Эти числа показываются в чипах-фильтрах на странице заказов
+  - Если этот эндпоинт не отвечает, фронтенд покажет 0 везде
+
+ЛОГИКА ФИЛЬТРАЦИИ НА ФРОНТЕНДЕ:
+  1. Пользователь выбирает канал → фронтенд запрашивает
+     /api/analytics/orders?sales_channel=X → статус-счётчики
+     обновляются и показывают числа ВНУТРИ этого канала
+  2. Канал-счётчики НЕ зависят от выбранного статуса —
+     они всегда показывают общее число заказов в каждом канале
+
+
+═══════════════════════════════════════════════════════════
+  4. СТАТУСЫ ЗАКАЗА
+═══════════════════════════════════════════════════════════
+
+Допустимые значения поля `status` в таблице orders:
+
+  analysis          — Анализ
+  in_work           — В работе
+  approval          — Товар на согласование
+  awaiting_courier  — На складе (ожидание курьера)  ← НОВЫЙ
+  in_transit        — В пути
+  delivered         — Товар доставлен
+  accepted          — Товар принят заказчиком
+  completed         — Завершен
+  rejected          — Отказ
+
+Flow переходов:
+  analysis → in_work → approval → awaiting_courier → in_transit → delivered → accepted → completed
+  (rejected доступен на любом этапе до accepted)
+
+Если статуса awaiting_courier ещё нет в БД — добавить в enum/constraint.
+
+
+═══════════════════════════════════════════════════════════
+  5. СТАТУС ОПЛАТЫ (новое поле)
+═══════════════════════════════════════════════════════════
+
+Фронтенд ожидает опциональное поле в Order:
+  payment_status: "partial" | "prepaid" | "paid" | "returned" | null
+
+Сейчас фронтенд вычисляет статус оплаты из payment_received
+и total_amount. Но лучше чтобы бэкенд отдавал готовое значение.
+
+Добавить в таблицу orders:
+  payment_status VARCHAR(20) DEFAULT NULL
+
+Логика автопересчёта при добавлении/изменении оплаты:
+  - payment_received = 0                    → NULL
+  - 0 < payment_received < total_amount     → "partial"
+  - payment_received >= total_amount        → "paid"
+  - есть пометка предоплата                 → "prepaid"
+  - был возврат                             → "returned"
+
+
+═══════════════════════════════════════════════════════════
+  6. КАК ФРОНТЕНД ПОДКЛЮЧЁН К БЭКЕНДУ
+═══════════════════════════════════════════════════════════
+
+Файлы:
+  src/api/orders.ts       — все API вызовы
+  src/hooks/useOrders.ts  — React Query хуки
+  src/api/analytics.ts    — аналитика
+  src/hooks/useAnalytics.ts
+  src/lib/axios.ts        — axios instance с auth interceptor
+  src/constants/index.ts  — VITE_ORDERS_API_URL
+
+Все запросы идут через axios с Bearer token.
+Параметры фильтрации отправляются как query string.
+Фронтенд уже отправляет sales_channel и ordering —
+бэкенд просто должен их обработать.
+
+
+═══════════════════════════════════════════════════════════
+  ПРИОРИТЕТ
+═══════════════════════════════════════════════════════════
+
+  🔴 Критично (без этого страница не работает нормально):
+    1. GET /api/orders/ — поддержать sales_channel и ordering
+    2. GET /api/orders/ — отдавать items в списке заказов
+    3. GET /api/analytics/orders — счётчики по статусам + фильтр sales_channel
+    4. Добавить статус awaiting_courier
+
+  🟡 Среднее:
+    5. Поле payment_status в Order
+
+  🟢 Низкое:
+    7. Автопересчёт payment_status
+

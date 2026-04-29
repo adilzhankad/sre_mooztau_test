@@ -1,0 +1,446 @@
+{
+  "common": {
+    "back": "Back",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "confirm": "Confirm",
+    "loading": "Loading...",
+    "retry": "Retry",
+    "search": "Search",
+    "yes": "Yes",
+    "no": "No",
+    "dash": "—"
+  },
+  "login": {
+    "brandTagline": "Refrigeration equipment manufacturing and sales management",
+    "brandTaglineShort": "Manufacturing management",
+    "title": "Sign in",
+    "subtitle": "Enter your credentials to access MoozTau",
+    "phoneLabel": "Phone number",
+    "phonePlaceholder": "+7 (___) ___ __ __",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "••••••••",
+    "submit": "Sign in",
+    "submitting": "Signing in...",
+    "forgotPassword": "Forgot password?",
+    "reset": {
+      "title": "Password recovery",
+      "stepPhone": "Phone",
+      "stepCode": "Code",
+      "stepPassword": "Password",
+      "phoneHint": "Enter the phone number linked to your account.",
+      "sendCode": "Send code",
+      "sending": "Sending...",
+      "codeHint": "A code was sent to <1>{{phone}}</1>. Enter it below.",
+      "codeLabel": "6-digit code",
+      "codePlaceholder": "000000",
+      "confirm": "Confirm",
+      "resend": "Resend",
+      "newPasswordHint": "Choose a new password.",
+      "newPasswordLabel": "New password",
+      "repeatPasswordLabel": "Repeat password",
+      "savePassword": "Save password",
+      "saving": "Saving...",
+      "successMessage": "Password changed! Redirecting…",
+      "errors": {
+        "sendFailed": "Failed to send code",
+        "resetFailed": "Password reset failed",
+        "codeLength": "Enter a 6-digit code",
+        "passwordMismatch": "Passwords do not match",
+        "passwordTooShort": "At least 6 characters"
+      }
+    }
+  },
+  "language": {
+    "label": "Language",
+    "ru": "Русский",
+    "kk": "Қазақша",
+    "en": "English"
+  },
+  "role": {
+    "SUPER_ADMIN": "Super admin",
+    "DEALER_ADMIN": "Dealer admin",
+    "DEALER_MANAGER": "Dealer manager",
+    "USER": "Client",
+    "FACTORY_ADMIN": "Factory admin",
+    "FACTORY_WORKER": "Factory worker",
+    "QC_INSPECTOR": "QC inspector",
+    "LOGISTICS": "Logistics",
+    "BUYER": "Buyer",
+    "MASTER": "Service master",
+    "fallback": "User"
+  },
+  "orgType": {
+    "HQ": "Headquarters",
+    "BRANCH": "Branch",
+    "DEALER": "Dealer",
+    "fallback": "Organization"
+  },
+  "orderStatus": {
+    "analysis": "Analysis",
+    "in_progress": "In progress",
+    "qc_review": "QC review",
+    "qc_passed": "QC passed",
+    "qc_rejected": "QC rejected",
+    "waiting_courier": "Waiting courier",
+    "matching": "Matching master",
+    "master_selected": "Master assigned",
+    "in_transit": "In transit",
+    "accepted": "Accepted by client",
+    "completed": "Completed",
+    "returned": "Returned",
+    "cancelled": "Cancelled",
+    "rejected": "Rejected"
+  },
+  "paymentStatus": {
+    "partial": "Partially completed",
+    "returned": "Goods returned",
+    "prepaid": "Prepayment received",
+    "paid": "Paid"
+  },
+  "buyerStatus": {
+    "analysis": "In progress",
+    "in_progress": "In progress",
+    "qc_review": "In progress",
+    "qc_passed": "In progress",
+    "qc_rejected": "In progress",
+    "waiting_courier": "Ready to ship",
+    "matching": "Matching master",
+    "master_selected": "Master assigned",
+    "in_transit": "In transit",
+    "accepted": "Accepted by client",
+    "completed": "Completed",
+    "returned": "Returned",
+    "cancelled": "Cancelled",
+    "rejected": "Rejected",
+    "stepper": {
+      "in_work": "In progress",
+      "ready_to_ship": "Ready to ship",
+      "in_transit": "In transit",
+      "completed": "Completed"
+    }
+  },
+  "profile": {
+    "kicker": "Personal account",
+    "accountActive": "Account active",
+    "accountInactive": "Account disabled",
+    "editButton": "Edit profile",
+    "fallbackName": "User",
+    "fallbackOrg": "Organization not set",
+    "loading": "Loading profile...",
+    "stats": {
+      "teammates": "In team",
+      "teammatesHint": "Number of employees in your organization",
+      "active": "Active",
+      "activeHint": "Employees with active access right now",
+      "memberSince": "Member since",
+      "memberSinceHint": "Date your profile was created in the system",
+      "channelType": "Channel type",
+      "channelTypeHint": "Role of your organization within MoozTau"
+    },
+    "contacts": {
+      "title": "Contacts",
+      "description": "Key data used for authorization and notifications.",
+      "action": "Change",
+      "fullName": "Full name",
+      "phone": "Phone",
+      "email": "Email",
+      "role": "Role"
+    },
+    "organization": {
+      "title": "Organization",
+      "description": "Summary of your structure and contact details.",
+      "name": "Name",
+      "type": "Type",
+      "region": "Region",
+      "address": "Address",
+      "phone": "Phone",
+      "email": "Email",
+      "connected": "Connected"
+    },
+    "preferences": {
+      "title": "Preferences",
+      "description": "Local interface settings for your workspace.",
+      "compactMode": "Compact mode",
+      "compactModeDesc": "Reduces spacing and makes the page denser.",
+      "notifications": "Reminders and notifications",
+      "notificationsDesc": "Keeps local notifications active."
+    },
+    "security": {
+      "title": "Security",
+      "description": "Manage sign-in, access and quick account actions.",
+      "changePassword": "Change password",
+      "logout": "Log out"
+    }
+  },
+  "nav": {
+    "orders": "Orders",
+    "products": "Catalog",
+    "factory": "Factory",
+    "qc": "QC Queue",
+    "logistics": "Logistics",
+    "service": "Service",
+    "deliveries": "Deliveries",
+    "analytics": "Analytics",
+    "finances": "Finances",
+    "audit": "Audit",
+    "chat": "Chat",
+    "users": "Employees",
+    "organizations": "Organizations",
+    "profile": "Profile",
+    "work": "Work",
+    "reports": "Reports",
+    "admin": "Management",
+    "searchPlaceholder": "Search...",
+    "notifications": "Notifications",
+    "expandMenu": "Expand menu",
+    "collapseMenu": "Collapse menu",
+    "logout": "Log out"
+  },
+  "theme": {
+    "light": "Light",
+    "dark": "Dark",
+    "switchToLight": "Switch to light theme",
+    "switchToDark": "Switch to dark theme"
+  },
+  "buyerNav": {
+    "home": "Home",
+    "messages": "Messages",
+    "profile": "Profile",
+    "orders": "Orders",
+    "ordersHint": "My purchases",
+    "service": "Service",
+    "serviceHint": "Support"
+  },
+  "emptyState": {
+    "errorTitle": "Loading error",
+    "errorDescription": "Failed to load data",
+    "retry": "Retry"
+  },
+  "serviceStatus": {
+    "new": "Created",
+    "matching": "Matching master",
+    "master_selected": "Master assigned",
+    "approval_pending": "Awaiting approval",
+    "approved": "Approved",
+    "in_progress": "In progress",
+    "waiting_parts": "Waiting for parts",
+    "completed": "Completed",
+    "closed": "Closed",
+    "cancelled": "Cancelled"
+  },
+  "matching": {
+    "blockTitle": "Master",
+    "modeStandard": "Standard delivery",
+    "modeMatching": "Master matching delivery",
+    "noMaster": "Master not assigned yet",
+    "matchingInProgress": "Matching master in progress",
+    "matchingStartedAt": "Matching started",
+    "masterSelectedAt": "Master selected",
+    "masterName": "Master",
+    "masterPhone": "Master phone",
+    "startMatching": "Start matching",
+    "selectMaster": "Select master",
+    "changeMaster": "Change master",
+    "selectMasterTitle": "Select master",
+    "selectMasterPlaceholder": "Choose a master...",
+    "noActiveMasters": "No active masters",
+    "confirmSelect": "Assign",
+    "starting": "Starting...",
+    "selecting": "Assigning...",
+    "noteOptional": "Note (optional)",
+    "needsMasterHint": "Select a master first",
+    "selfAssignBlocked": "You can't pick yourself"
+  },
+  "masterCabinet": {
+    "title": "My orders",
+    "tabs": {
+      "active": "Active",
+      "available": "Open auctions",
+      "completed": "Completed"
+    },
+    "empty": {
+      "active": "No active deliveries",
+      "available": "No open auctions",
+      "completed": "No completed deliveries yet"
+    },
+    "accept": "Accept order",
+    "deliver": "Delivered",
+    "accepting": "Accepting...",
+    "delivering": "Completing...",
+    "addressLabel": "Address",
+    "clientLabel": "Client",
+    "phoneLabel": "Phone",
+    "deadlineLabel": "Deadline",
+    "matchingStartedAt": "Matching started"
+  },
+  "ordersErrors": {
+    "matching_must_select_master": "Select a master first",
+    "not_fully_paid": "Order is not fully paid",
+    "not_waiting_courier": "Order is not in waiting courier status",
+    "not_in_matching": "Order is not in matching stage",
+    "matching_needs_master": "Select a master first",
+    "not_a_master": "Selected user is not a master",
+    "cannot_self_assign": "You can't assign yourself",
+    "master_inactive": "Master is inactive",
+    "master_already_assigned": "Master already assigned — reopen matching",
+    "not_assigned_master": "This is not your task",
+    "service_invalid_transition": "Invalid service request transition",
+    "users_not_found": "User not found",
+    "fallback": "Something went wrong, try again later"
+  },
+  "productCategory": {
+    "all": "All",
+    "BUILT_IN": "Built-in",
+    "OUTDOOR": "Outdoor",
+    "UNIT": "Unit",
+    "DOOR": "Doors",
+    "WITHOUT_UNIT": "Panels",
+    "FREEZER": "Freezer"
+  },
+  "ordersPage": {
+    "title": "Orders",
+    "newOrder": "New order",
+    "tabs": { "active": "Active", "archive": "Archive" },
+    "quick": {
+      "today": "Today",
+      "inProgress": "In progress",
+      "delayed": "Delayed",
+      "paid": "Paid"
+    },
+    "searchPlaceholder": "Search by number, name, phone...",
+    "filters": {
+      "statuses": "Statuses",
+      "allStatuses": "All statuses",
+      "channels": "Channels",
+      "allChannels": "All channels",
+      "clearAll": "Clear",
+      "removeFilter": "Remove filter"
+    },
+    "sort": {
+      "newest": "Newest first",
+      "oldest": "Oldest first",
+      "amountDesc": "Amount (desc)",
+      "amountAsc": "Amount (asc)"
+    },
+    "found": "Found",
+    "loadError": "Loading error",
+    "emptyTitle": "No orders",
+    "emptyDescFiltered": "Adjust filter parameters",
+    "emptyDescEmpty": "Create the first order",
+    "table": {
+      "order": "Order",
+      "client": "Client",
+      "amount": "Amount",
+      "status": "Status",
+      "payment": "Payment",
+      "deadline": "Deadline",
+      "action": "Action",
+      "items": "Items",
+      "due": "Due"
+    },
+    "deadline": {
+      "today": "today",
+      "daysLeft": "{{count}}d",
+      "overdue": "overdue {{count}}d",
+      "overdueShort": "-{{count}}d"
+    }
+  },
+  "productsPage": {
+    "kicker": "MoozTau catalog",
+    "title": "Refrigeration equipment and components",
+    "subtitle": "Photos, categories, prices and assortment management — all in one place.",
+    "newProduct": "+ New product",
+    "stats": {
+      "total": "Total",
+      "active": "Active",
+      "inactive": "Hidden"
+    },
+    "searchPlaceholder": "Search by model, name or description...",
+    "filters": {
+      "active": "Only active",
+      "all": "All",
+      "inactive": "Hidden"
+    },
+    "card": {
+      "noDescription": "No description yet",
+      "priceLabel": "Price",
+      "priceEmpty": "Price not set",
+      "unitLabel": "Unit",
+      "statusActive": "Active",
+      "statusInactive": "Hidden",
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+    "empty": {
+      "title": "Catalog is empty",
+      "description": "Try changing the filters or adding a new product to the catalog."
+    },
+    "modal": {
+      "createTitle": "New product",
+      "editTitle": "Edit product",
+      "subtitle": "Manage the product card and the current catalog price.",
+      "fields": {
+        "model": "Model *",
+        "name": "Name *",
+        "category": "Category",
+        "unit": "Unit",
+        "description": "Description",
+        "imageUrl": "Image URL",
+        "imageUrlPlaceholder": "https://...",
+        "colors": "Available colors",
+        "colorsPlaceholder": "White, Silver, Anthracite",
+        "length": "Length",
+        "height": "Height",
+        "width": "Width"
+      },
+      "priceSection": "Current price",
+      "prices": { "dealer": "Dealer", "recommended": "Recommended", "perMeter": "Per meter" },
+      "activeCheckbox": "Show product in active catalog",
+      "cancel": "Cancel",
+      "create": "Create product",
+      "save": "Save changes",
+      "saving": "Saving...",
+      "requiredFields": "Fill in the model and name"
+    },
+    "confirmDelete": "Delete product {{model}}?"
+  },
+  "servicePage": {
+    "kicker": "Service",
+    "title": "Service requests",
+    "titleMaster": "My service requests",
+    "newRequest": "+ New request",
+    "accessDenied": {
+      "title": "Access denied",
+      "description": "The service section is available to admins, managers and masters."
+    },
+    "stats": {
+      "total": "Total",
+      "new": "New",
+      "inProgress": "In progress",
+      "waiting": "Waiting parts",
+      "completed": "Completed"
+    },
+    "tabs": {
+      "mine": "Mine",
+      "available": "Available",
+      "all": "All",
+      "active": "Active",
+      "done": "Completed"
+    },
+    "searchPlaceholder": "Search by client, ticket, phone…",
+    "allStatuses": "All statuses",
+    "empty": {
+      "mine": "You have no requests in progress yet",
+      "available": "No free requests available",
+      "default": "No service requests yet"
+    },
+    "viewAvailable": "View available",
+    "warranty": "Warranty",
+    "noVisitDate": "Visit date not assigned",
+    "takeInWork": "Take in",
+    "noMasterAssigned": "No master assigned"
+  }
+}

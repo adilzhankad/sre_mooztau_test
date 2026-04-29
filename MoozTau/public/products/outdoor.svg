@@ -1,0 +1,20 @@
+<svg width="800" height="600" viewBox="0 0 800 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="600" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#BAE6FD"/>
+      <stop offset="1" stop-color="#E0F2FE"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#sky)"/>
+  <rect y="430" width="800" height="170" fill="#BBF7D0"/>
+  <rect x="145" y="150" width="500" height="290" rx="18" fill="#E2E8F0" stroke="#64748B" stroke-width="10"/>
+  <rect x="190" y="195" width="180" height="180" rx="12" fill="#F8FAFC" stroke="#94A3B8" stroke-width="6"/>
+  <rect x="405" y="190" width="195" height="190" rx="12" fill="#DBEAFE" stroke="#60A5FA" stroke-width="6"/>
+  <path d="M145 215H645" stroke="#94A3B8" stroke-width="8"/>
+  <path d="M145 280H645" stroke="#CBD5E1" stroke-width="6"/>
+  <path d="M120 150H670L620 105H170L120 150Z" fill="#334155"/>
+  <rect x="510" y="115" width="70" height="22" rx="11" fill="#0EA5E9"/>
+  <circle cx="250" cy="470" r="18" fill="#475569"/>
+  <circle cx="540" cy="470" r="18" fill="#475569"/>
+  <text x="70" y="548" fill="#0F172A" font-size="34" font-family="Arial, sans-serif" font-weight="700">OUTDOOR UNIT</text>
+</svg>

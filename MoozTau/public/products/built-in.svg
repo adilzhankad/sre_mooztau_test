@@ -1,0 +1,24 @@
+<svg width="800" height="600" viewBox="0 0 800 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="800" y2="600" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#E0F2FE"/>
+      <stop offset="1" stop-color="#F8FAFC"/>
+    </linearGradient>
+    <linearGradient id="metal" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#F8FAFC"/>
+      <stop offset="1" stop-color="#CBD5E1"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#bg)"/>
+  <rect x="110" y="85" width="580" height="430" rx="30" fill="#0F172A" opacity="0.08"/>
+  <rect x="130" y="70" width="540" height="430" rx="28" fill="#FFFFFF"/>
+  <rect x="190" y="110" width="420" height="340" rx="24" fill="url(#metal)" stroke="#94A3B8" stroke-width="8"/>
+  <rect x="240" y="160" width="320" height="220" rx="18" fill="#DBEAFE" stroke="#60A5FA" stroke-width="6"/>
+  <rect x="260" y="180" width="280" height="180" rx="12" fill="#E0F2FE"/>
+  <path d="M275 205H525" stroke="#93C5FD" stroke-width="6" stroke-linecap="round"/>
+  <path d="M275 245H525" stroke="#BFDBFE" stroke-width="6" stroke-linecap="round"/>
+  <path d="M275 285H525" stroke="#BFDBFE" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="580" cy="280" r="16" fill="#0F172A"/>
+  <rect x="235" y="465" width="330" height="14" rx="7" fill="#94A3B8"/>
+  <text x="70" y="548" fill="#0F172A" font-size="34" font-family="Arial, sans-serif" font-weight="700">BUILT-IN COLD ROOM</text>
+</svg>

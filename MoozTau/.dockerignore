@@ -1,0 +1,14 @@
+node_modules
+dist
+.git
+.idea
+.vscode
+ios
+android
+*.tsbuildinfo
+.env
+.env.*
+!.env.production
+!.env.example
+Thumbs.db
+.DS_Store

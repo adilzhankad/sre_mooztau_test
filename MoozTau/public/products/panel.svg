@@ -1,0 +1,11 @@
+<svg width="800" height="600" viewBox="0 0 800 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="600" fill="#F8FAFC"/>
+  <rect x="160" y="90" width="140" height="400" rx="16" fill="#E2E8F0" stroke="#94A3B8" stroke-width="8"/>
+  <rect x="330" y="90" width="140" height="400" rx="16" fill="#F1F5F9" stroke="#CBD5E1" stroke-width="8"/>
+  <rect x="500" y="90" width="140" height="400" rx="16" fill="#E2E8F0" stroke="#94A3B8" stroke-width="8"/>
+  <path d="M230 110V470" stroke="#BFDBFE" stroke-width="4" stroke-dasharray="10 10"/>
+  <path d="M400 110V470" stroke="#BFDBFE" stroke-width="4" stroke-dasharray="10 10"/>
+  <path d="M570 110V470" stroke="#BFDBFE" stroke-width="4" stroke-dasharray="10 10"/>
+  <rect x="130" y="505" width="540" height="18" rx="9" fill="#CBD5E1"/>
+  <text x="70" y="558" fill="#0F172A" font-size="34" font-family="Arial, sans-serif" font-weight="700">SANDWICH PANEL</text>
+</svg>

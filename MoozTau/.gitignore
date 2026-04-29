@@ -1,0 +1,48 @@
+# dependencies
+node_modules/
+
+# build output
+dist/
+
+# Capacitor native projects
+/ios
+/android
+
+# env files
+.env
+.env.*
+.env*.local
+
+# debug
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# typescript
+*.tsbuildinfo
+
+# macOS
+.DS_Store
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+Thumbs.db
+
+# lockfiles
+bun.lock
+package-lock.json
+
+# native
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.pem
+
+# backend
+Mooztau_back/

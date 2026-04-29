@@ -1,0 +1,446 @@
+{
+  "common": {
+    "back": "Назад",
+    "cancel": "Отмена",
+    "save": "Сохранить",
+    "delete": "Удалить",
+    "edit": "Редактировать",
+    "confirm": "Подтвердить",
+    "loading": "Загрузка...",
+    "retry": "Повторить",
+    "search": "Поиск",
+    "yes": "Да",
+    "no": "Нет",
+    "dash": "—"
+  },
+  "login": {
+    "brandTagline": "Управление производством и продажами холодильного оборудования",
+    "brandTaglineShort": "Управление производством",
+    "title": "Вход в систему",
+    "subtitle": "Введите данные для входа в MoozTau",
+    "phoneLabel": "Номер телефона",
+    "phonePlaceholder": "+7 (___) ___ __ __",
+    "passwordLabel": "Пароль",
+    "passwordPlaceholder": "••••••••",
+    "submit": "Войти",
+    "submitting": "Вход...",
+    "forgotPassword": "Забыли пароль?",
+    "reset": {
+      "title": "Восстановление пароля",
+      "stepPhone": "Телефон",
+      "stepCode": "Код",
+      "stepPassword": "Пароль",
+      "phoneHint": "Введите номер телефона, привязанный к аккаунту.",
+      "sendCode": "Отправить код",
+      "sending": "Отправка...",
+      "codeHint": "Код отправлен на <1>{{phone}}</1>. Введите его ниже.",
+      "codeLabel": "6-значный код",
+      "codePlaceholder": "000000",
+      "confirm": "Подтвердить",
+      "resend": "Отправить повторно",
+      "newPasswordHint": "Придумайте новый пароль.",
+      "newPasswordLabel": "Новый пароль",
+      "repeatPasswordLabel": "Повторите пароль",
+      "savePassword": "Сохранить пароль",
+      "saving": "Сохранение...",
+      "successMessage": "Пароль изменён! Перенаправление…",
+      "errors": {
+        "sendFailed": "Ошибка отправки кода",
+        "resetFailed": "Ошибка сброса пароля",
+        "codeLength": "Введите 6-значный код",
+        "passwordMismatch": "Пароли не совпадают",
+        "passwordTooShort": "Минимум 6 символов"
+      }
+    }
+  },
+  "language": {
+    "label": "Язык",
+    "ru": "Русский",
+    "kk": "Қазақша",
+    "en": "English"
+  },
+  "role": {
+    "SUPER_ADMIN": "Суперадминистратор",
+    "DEALER_ADMIN": "Администратор дилера",
+    "DEALER_MANAGER": "Менеджер дилера",
+    "USER": "Клиент",
+    "FACTORY_ADMIN": "Администратор завода",
+    "FACTORY_WORKER": "Работник завода",
+    "QC_INSPECTOR": "Контролёр качества",
+    "LOGISTICS": "Логист",
+    "BUYER": "Покупатель",
+    "MASTER": "Мастер сервиса",
+    "fallback": "Пользователь"
+  },
+  "orgType": {
+    "HQ": "Главный офис",
+    "BRANCH": "Филиал",
+    "DEALER": "Дилер",
+    "fallback": "Организация"
+  },
+  "orderStatus": {
+    "analysis": "Анализ",
+    "in_progress": "В работе",
+    "qc_review": "Проверка QC",
+    "qc_passed": "QC пройден",
+    "qc_rejected": "QC возврат",
+    "waiting_courier": "Ожидание курьера",
+    "matching": "Подбор мастера",
+    "master_selected": "Мастер назначен",
+    "in_transit": "В пути",
+    "accepted": "Принят клиентом",
+    "completed": "Завершён",
+    "returned": "Возврат",
+    "cancelled": "Отменён",
+    "rejected": "Отклонён"
+  },
+  "paymentStatus": {
+    "partial": "Исполнен частично",
+    "returned": "Товар возврат",
+    "prepaid": "Получена предоплата",
+    "paid": "Оплачен"
+  },
+  "buyerStatus": {
+    "analysis": "В работе",
+    "in_progress": "В работе",
+    "qc_review": "В работе",
+    "qc_passed": "В работе",
+    "qc_rejected": "В работе",
+    "waiting_courier": "Готов к отправке",
+    "matching": "Подбор мастера",
+    "master_selected": "Мастер назначен",
+    "in_transit": "В пути",
+    "accepted": "Принят клиентом",
+    "completed": "Завершён",
+    "returned": "Возврат",
+    "cancelled": "Отменён",
+    "rejected": "Отклонён",
+    "stepper": {
+      "in_work": "В работе",
+      "ready_to_ship": "Готов к отправке",
+      "in_transit": "В пути",
+      "completed": "Завершён"
+    }
+  },
+  "profile": {
+    "kicker": "Личный кабинет",
+    "accountActive": "Аккаунт активен",
+    "accountInactive": "Аккаунт отключён",
+    "editButton": "Редактировать профиль",
+    "fallbackName": "Пользователь",
+    "fallbackOrg": "Организация не указана",
+    "loading": "Загружаем профиль...",
+    "stats": {
+      "teammates": "В команде",
+      "teammatesHint": "Количество сотрудников в вашей организации",
+      "active": "Активных",
+      "activeHint": "Сотрудники с активным доступом прямо сейчас",
+      "memberSince": "С нами с",
+      "memberSinceHint": "Дата создания вашего профиля в системе",
+      "channelType": "Тип канала",
+      "channelTypeHint": "Роль вашей организации в структуре MoozTau"
+    },
+    "contacts": {
+      "title": "Контакты",
+      "description": "Основные данные, которые используются в авторизации и уведомлениях.",
+      "action": "Изменить",
+      "fullName": "ФИО",
+      "phone": "Телефон",
+      "email": "Email",
+      "role": "Роль"
+    },
+    "organization": {
+      "title": "Организация",
+      "description": "Сводка по вашей структуре и контактам для работы.",
+      "name": "Название",
+      "type": "Тип",
+      "region": "Регион",
+      "address": "Адрес",
+      "phone": "Телефон",
+      "email": "Email",
+      "connected": "Подключена"
+    },
+    "preferences": {
+      "title": "Предпочтения",
+      "description": "Локальные настройки интерфейса для вашего рабочего места.",
+      "compactMode": "Компактный режим",
+      "compactModeDesc": "Уменьшает отступы и делает страницу плотнее.",
+      "notifications": "Напоминания и уведомления",
+      "notificationsDesc": "Оставляет локальные уведомления активными."
+    },
+    "security": {
+      "title": "Безопасность",
+      "description": "Управление входом, доступом и быстрыми действиями аккаунта.",
+      "changePassword": "Сменить пароль",
+      "logout": "Выйти из аккаунта"
+    }
+  },
+  "nav": {
+    "orders": "Заказы",
+    "products": "Каталог",
+    "factory": "Фабрика",
+    "qc": "Очередь QC",
+    "logistics": "Логистика",
+    "service": "Сервис",
+    "deliveries": "Доставки",
+    "analytics": "Аналитика",
+    "finances": "Финансы",
+    "audit": "Аудит",
+    "chat": "Чат",
+    "users": "Сотрудники",
+    "organizations": "Организации",
+    "profile": "Профиль",
+    "work": "Работа",
+    "reports": "Отчёты",
+    "admin": "Управление",
+    "searchPlaceholder": "Поиск...",
+    "notifications": "Уведомления",
+    "expandMenu": "Развернуть меню",
+    "collapseMenu": "Свернуть меню",
+    "logout": "Выйти"
+  },
+  "theme": {
+    "light": "Светлая",
+    "dark": "Тёмная",
+    "switchToLight": "Включить светлую тему",
+    "switchToDark": "Включить тёмную тему"
+  },
+  "buyerNav": {
+    "home": "Главная",
+    "orders": "Заказы",
+    "ordersHint": "Мои покупки",
+    "messages": "Сообщения",
+    "profile": "Профиль",
+    "service": "Сервис",
+    "serviceHint": "Поддержка"
+  },
+  "emptyState": {
+    "errorTitle": "Ошибка загрузки",
+    "errorDescription": "Не удалось загрузить данные",
+    "retry": "Повторить"
+  },
+  "serviceStatus": {
+    "new": "Создана",
+    "matching": "Подбор мастера",
+    "master_selected": "Мастер назначен",
+    "approval_pending": "Ожидание подтверждения",
+    "approved": "Подтверждена",
+    "in_progress": "В работе",
+    "waiting_parts": "Ждём запчасти",
+    "completed": "Завершена",
+    "closed": "Закрыта",
+    "cancelled": "Отменена"
+  },
+  "matching": {
+    "blockTitle": "Мастер",
+    "modeStandard": "Стандартная доставка",
+    "modeMatching": "Доставка с подбором мастера",
+    "noMaster": "Мастер ещё не назначен",
+    "matchingInProgress": "Идёт подбор мастера",
+    "matchingStartedAt": "Подбор запущен",
+    "masterSelectedAt": "Мастер выбран",
+    "masterName": "Мастер",
+    "masterPhone": "Телефон мастера",
+    "startMatching": "Запустить подбор",
+    "selectMaster": "Выбрать мастера",
+    "changeMaster": "Сменить мастера",
+    "selectMasterTitle": "Выбор мастера",
+    "selectMasterPlaceholder": "Выберите мастера...",
+    "noActiveMasters": "Нет активных мастеров",
+    "confirmSelect": "Назначить",
+    "starting": "Запуск...",
+    "selecting": "Назначение...",
+    "noteOptional": "Комментарий (опционально)",
+    "needsMasterHint": "Сначала выберите мастера",
+    "selfAssignBlocked": "Нельзя выбрать себя"
+  },
+  "masterCabinet": {
+    "title": "Мои заказы",
+    "tabs": {
+      "active": "Активные",
+      "available": "Открытый аукцион",
+      "completed": "Завершённые"
+    },
+    "empty": {
+      "active": "Нет активных доставок",
+      "available": "Нет открытых аукционов",
+      "completed": "Завершённых доставок пока нет"
+    },
+    "accept": "Принять заказ",
+    "deliver": "Доставлено",
+    "accepting": "Принимаем...",
+    "delivering": "Завершаем...",
+    "addressLabel": "Адрес",
+    "clientLabel": "Клиент",
+    "phoneLabel": "Телефон",
+    "deadlineLabel": "Дедлайн",
+    "matchingStartedAt": "Подбор запущен"
+  },
+  "ordersErrors": {
+    "matching_must_select_master": "Сначала выберите мастера",
+    "not_fully_paid": "Заказ не полностью оплачен",
+    "not_waiting_courier": "Заказ не в статусе ожидания курьера",
+    "not_in_matching": "Заказ не на этапе подбора",
+    "matching_needs_master": "Сначала выберите мастера",
+    "not_a_master": "Выбранный пользователь — не мастер",
+    "cannot_self_assign": "Нельзя назначить самого себя",
+    "master_inactive": "Мастер деактивирован",
+    "master_already_assigned": "Мастер уже назначен — переоткройте подбор",
+    "not_assigned_master": "Это не ваше задание",
+    "service_invalid_transition": "Недопустимый переход статуса заявки",
+    "users_not_found": "Пользователь не найден",
+    "fallback": "Произошла ошибка, попробуйте позже"
+  },
+  "productCategory": {
+    "all": "Все",
+    "BUILT_IN": "Встроенный",
+    "OUTDOOR": "Выносной",
+    "UNIT": "Агрегат",
+    "DOOR": "Двери",
+    "WITHOUT_UNIT": "Панели",
+    "FREEZER": "Морозилка"
+  },
+  "ordersPage": {
+    "title": "Заказы",
+    "newOrder": "Новый заказ",
+    "tabs": { "active": "Активные", "archive": "Архив" },
+    "quick": {
+      "today": "Сегодня",
+      "inProgress": "В работе",
+      "delayed": "Просрочены",
+      "paid": "Оплачены"
+    },
+    "searchPlaceholder": "Поиск по номеру, имени, телефону...",
+    "filters": {
+      "statuses": "Статусы",
+      "allStatuses": "Все статусы",
+      "channels": "Каналы",
+      "allChannels": "Все каналы",
+      "clearAll": "Сбросить",
+      "removeFilter": "Убрать фильтр"
+    },
+    "sort": {
+      "newest": "Сначала новые",
+      "oldest": "Сначала старые",
+      "amountDesc": "Сумма (убыв.)",
+      "amountAsc": "Сумма (возр.)"
+    },
+    "found": "Найдено",
+    "loadError": "Ошибка загрузки",
+    "emptyTitle": "Заказов нет",
+    "emptyDescFiltered": "Измените параметры фильтра",
+    "emptyDescEmpty": "Создайте первый заказ",
+    "table": {
+      "order": "Заказ",
+      "client": "Клиент",
+      "amount": "Сумма",
+      "status": "Статус",
+      "payment": "Оплата",
+      "deadline": "Дедлайн",
+      "action": "Действие",
+      "items": "Позиции",
+      "due": "Остаток"
+    },
+    "deadline": {
+      "today": "сегодня",
+      "daysLeft": "{{count}} дн.",
+      "overdue": "просрочен {{count}} дн.",
+      "overdueShort": "-{{count}} дн."
+    }
+  },
+  "productsPage": {
+    "kicker": "Каталог MoozTau",
+    "title": "Холодильное оборудование и комплектующие",
+    "subtitle": "Фото, категории, цены и управление ассортиментом в одном месте.",
+    "newProduct": "+ Новый товар",
+    "stats": {
+      "total": "Всего",
+      "active": "Активных",
+      "inactive": "Скрытых"
+    },
+    "searchPlaceholder": "Поиск по модели, названию или описанию...",
+    "filters": {
+      "active": "Только активные",
+      "all": "Все",
+      "inactive": "Скрытые"
+    },
+    "card": {
+      "noDescription": "Описание пока не заполнено",
+      "priceLabel": "Цена",
+      "priceEmpty": "Цена не задана",
+      "unitLabel": "Ед. изм.",
+      "statusActive": "Активен",
+      "statusInactive": "Скрыт",
+      "edit": "Редактировать",
+      "delete": "Удалить"
+    },
+    "empty": {
+      "title": "Каталог пока пуст",
+      "description": "Попробуй изменить фильтры или добавить новый товар в каталог."
+    },
+    "modal": {
+      "createTitle": "Новый товар",
+      "editTitle": "Редактирование товара",
+      "subtitle": "Управление карточкой товара и текущей ценой каталога.",
+      "fields": {
+        "model": "Модель *",
+        "name": "Название *",
+        "category": "Категория",
+        "unit": "Ед. измерения",
+        "description": "Описание",
+        "imageUrl": "URL изображения",
+        "imageUrlPlaceholder": "https://...",
+        "colors": "Доступные цвета",
+        "colorsPlaceholder": "Белый, Серебро, Антрацит",
+        "length": "Длина",
+        "height": "Высота",
+        "width": "Ширина"
+      },
+      "priceSection": "Текущая цена",
+      "prices": { "dealer": "Dealer", "recommended": "Рекомендуемая", "perMeter": "За метр" },
+      "activeCheckbox": "Показывать товар в активном каталоге",
+      "cancel": "Отмена",
+      "create": "Создать товар",
+      "save": "Сохранить изменения",
+      "saving": "Сохраняю...",
+      "requiredFields": "Заполните модель и название товара"
+    },
+    "confirmDelete": "Удалить товар {{model}}?"
+  },
+  "servicePage": {
+    "kicker": "Сервис",
+    "title": "Сервисные заявки",
+    "titleMaster": "Мои сервисные заявки",
+    "newRequest": "+ Новая заявка",
+    "accessDenied": {
+      "title": "Доступ закрыт",
+      "description": "Раздел сервиса доступен администрации, менеджерам и мастерам."
+    },
+    "stats": {
+      "total": "Всего",
+      "new": "Новых",
+      "inProgress": "В работе",
+      "waiting": "Ждём запчасти",
+      "completed": "Завершённых"
+    },
+    "tabs": {
+      "mine": "Мои",
+      "available": "Доступные",
+      "all": "Все",
+      "active": "Активные",
+      "done": "Завершённые"
+    },
+    "searchPlaceholder": "Поиск по клиенту, тикету, телефону…",
+    "allStatuses": "Все статусы",
+    "empty": {
+      "mine": "У вас пока нет заявок в работе",
+      "available": "Свободных заявок нет",
+      "default": "Сервисных заявок пока нет"
+    },
+    "viewAvailable": "Посмотреть доступные",
+    "warranty": "Гарантия",
+    "noVisitDate": "Дата визита не назначена",
+    "takeInWork": "Взять в работу",
+    "noMasterAssigned": "Мастер не назначен"
+  }
+}
