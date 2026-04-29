@@ -33,3 +33,26 @@ class ChatMessage(Base):
     sender_name = Column(String(200), default="")
     content = Column(Text, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
+
+
+# ── Direct messaging ───────────────────────────────────────────────────────────
+
+class DirectConversation(Base):
+    __tablename__ = "direct_conversations"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    employee_id = Column(BigInteger, nullable=False, unique=True)
+    employee_name = Column(String(200), nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+    last_message_at = Column(DateTime, default=datetime.utcnow)
+
+
+class DirectMessage(Base):
+    __tablename__ = "direct_messages"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    conversation_id = Column(Integer, ForeignKey("direct_conversations.id", ondelete="CASCADE"), nullable=False)
+    sender_id = Column(BigInteger, nullable=False)
+    sender_name = Column(String(200), nullable=False)
+    content = Column(Text, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow)

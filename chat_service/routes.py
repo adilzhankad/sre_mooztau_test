@@ -5,8 +5,8 @@ from fastapi import APIRouter, Depends, HTTPException, WebSocket, WebSocketDisco
 from sqlalchemy.orm import Session
 
 from database import get_db, SessionLocal
-from models import ChatMessage, ChatParticipant, ChatRoom
-from schemas import ChatRoomCreate, ChatRoomOut, MessageCreate, MessageOut
+from models import ChatMessage, ChatParticipant, ChatRoom, DirectConversation, DirectMessage
+from schemas import ChatRoomCreate, ChatRoomOut, MessageCreate, MessageOut, DirectConversationCreate, DirectConversationOut, DirectMessageOut
 from ws_manager import manager
 
 router = APIRouter(tags=["chat"])
@@ -160,5 +160,95 @@ async def websocket_endpoint(
                 "room_id": room_id,
                 "online": manager.online_count(room_id),
             })
+    finally:
+        db.close()
+
+
+# ── Direct conversations ───────────────────────────────────────────────────────
+
+@router.get("/direct/conversations", response_model=List[DirectConversationOut])
+def list_conversations(employee_id: int = None, db: Session = Depends(get_db)):
+    """Admin: все диалоги. Сотрудник: свой диалог по employee_id."""
+    if employee_id:
+        conv = db.query(DirectConversation).filter(DirectConversation.employee_id == employee_id).first()
+        return [conv] if conv else []
+    return db.query(DirectConversation).order_by(DirectConversation.last_message_at.desc()).all()
+
+
+@router.post("/direct/conversations", response_model=DirectConversationOut, status_code=201)
+def get_or_create_conversation(data: DirectConversationCreate, db: Session = Depends(get_db)):
+    """Создаёт диалог при первом сообщении или возвращает существующий."""
+    conv = db.query(DirectConversation).filter(DirectConversation.employee_id == data.employee_id).first()
+    if not conv:
+        conv = DirectConversation(employee_id=data.employee_id, employee_name=data.employee_name)
+        db.add(conv)
+        db.commit()
+        db.refresh(conv)
+    return conv
+
+
+@router.get("/direct/conversations/{conv_id}/messages", response_model=List[DirectMessageOut])
+def get_direct_messages(conv_id: int, limit: int = 100, db: Session = Depends(get_db)):
+    conv = db.get(DirectConversation, conv_id)
+    if not conv:
+        raise HTTPException(status_code=404, detail="Conversation not found")
+    return (
+        db.query(DirectMessage)
+        .filter(DirectMessage.conversation_id == conv_id)
+        .order_by(DirectMessage.created_at.asc())
+        .limit(limit)
+        .all()
+    )
+
+
+# ── Direct WebSocket ───────────────────────────────────────────────────────────
+
+@router.websocket("/ws/direct/{conv_id}")
+async def direct_ws(
+    websocket: WebSocket,
+    conv_id: int,
+    user_id: int = 0,
+    user_name: str = "Аноним",
+):
+    db = SessionLocal()
+    try:
+        conv = db.get(DirectConversation, conv_id)
+        if not conv:
+            await websocket.close(code=4004)
+            return
+
+        ws_key = f"direct_{conv_id}"
+        await manager.connect(ws_key, websocket, user_id, user_name)
+
+        try:
+            while True:
+                data = await websocket.receive_json()
+                content = str(data.get("content", "")).strip()
+                if not content:
+                    continue
+
+                msg = DirectMessage(
+                    conversation_id=conv_id,
+                    sender_id=user_id,
+                    sender_name=user_name,
+                    content=content,
+                )
+                db.add(msg)
+                conv.last_message_at = datetime.utcnow()
+                db.commit()
+                db.refresh(msg)
+
+                await manager.broadcast(ws_key, {
+                    "type": "message",
+                    "id": msg.id,
+                    "conversation_id": conv_id,
+                    "sender_id": user_id,
+                    "sender_name": user_name,
+                    "content": content,
+                    "created_at": msg.created_at.isoformat(),
+                })
+
+        except WebSocketDisconnect:
+            manager.disconnect(ws_key, websocket)
     finally:
         db.close()
