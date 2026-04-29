@@ -6,3 +6,4 @@ __pycache__/
 .idea/
 *.egg-info/
 alembic/versions/__pycache__/
+CLAUDE.md

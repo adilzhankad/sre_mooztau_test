@@ -177,10 +177,16 @@ docker compose up -d --build
 ```
 
 После запуска:
-- Фронтенд: http://localhost:3100
-- Auth API: http://localhost:8004/docs (если порт открыт)
-- Orders API: http://localhost:8001/docs
-- Finance API: http://localhost:8003/docs
+
+| Сервис | URL |
+|--------|-----|
+| Фронтенд | http://localhost:3100 |
+| Auth API | http://localhost:8002/docs |
+| Orders API | http://localhost:8001/docs |
+| Finance API | http://localhost:8003/docs |
+| Prometheus | http://localhost:9090 |
+| Grafana | http://localhost:3000 (admin / из .env) |
+| Alertmanager | http://localhost:9093 |
 
 Начальные данные создаются автоматически:
 - 10 организаций
@@ -214,6 +220,92 @@ Mooztau_back/
 │   ├── models.py          # Transaction, Category, BankAccount
 │   ├── routes.py          # Transactions, Categories, Accounts, Reports
 │   └── seed.py
+└── data/                  # Excel с историческими данными
+```
+
+## Terraform (IaC)
+
+Инфраструктура описана в `terraform/` под Yandex Cloud.
+
+```bash
+cd terraform
+
+# Указать folder_id и cloud_id в terraform.tfvars
+terraform init
+terraform plan
+terraform apply
+terraform destroy
+```
+
+Terraform создаёт: VM (Ubuntu 22.04), VPC сеть и подсеть, security group с открытыми портами 22, 80, 3100, 8001-8003, 9090, 3000, 9093.
+
+---
+
+## Симуляция инцидента
+
+Симулирует отказ orders_service из-за неверных DB-credentials:
+
+```bash
+# 1. Испортить credentials в docker-compose.yml:
+#    environment:
+#      DATABASE_URL: postgresql://wrong_user:wrong_pass@wrong_host:5432/wrong_db
+
+# 2. Перезапустить только orders:
+docker compose up -d orders
+
+# 3. Наблюдать сбой в Grafana / Prometheus (http://localhost:9090/targets)
+
+# 4. Проверить логи:
+docker logs mooztau_back-orders-1
+
+# 5. Восстановить: убрать DATABASE_URL из environment (или исправить)
+docker compose up -d orders
+
+# 6. Убедиться в восстановлении:
+curl http://localhost:8001/health
+```
+
+Подробный разбор инцидента: [`docs/incident_report.md`](docs/incident_report.md)  
+Postmortem: [`docs/postmortem.md`](docs/postmortem.md)
+
+---
+
+## Структура проекта
+
+```
+Mooztau_back/
+├── docker-compose.yml
+├── auth_service/          # Микросервис авторизации (port 8002)
+│   ├── main.py
+│   ├── models.py          # User, Organization
+│   ├── routes.py          # Auth, Users, Organizations API
+│   ├── security.py        # JWT, bcrypt
+│   └── seed.py
+├── orders_service/        # Микросервис заказов (port 8001)
+│   ├── main.py
+│   ├── models/            # Order, Product, Price, Inventory, Payment
+│   ├── routers/           # Orders, Products, Prices, Factory, Analytics
+│   ├── services/          # Permissions
+│   ├── middleware/        # JWT auth
+│   └── scripts/           # Seed, legacy migration
+├── finance_service/       # Микросервис финансов (port 8003)
+│   ├── main.py
+│   ├── models.py          # Transaction, ExpenseCategory, BankAccount
+│   ├── routes.py          # Transactions, Categories, Accounts, Reports
+│   └── seed.py
+├── MoozTau/               # React фронтенд (Nginx, port 3100)
+├── monitoring/
+│   ├── prometheus/        # prometheus.yml + alerts.yml
+│   ├── grafana/           # Provisioning + dashboard JSON
+│   └── alertmanager/      # alertmanager.yml
+├── terraform/             # IaC для Yandex Cloud
+│   ├── main.tf
+│   ├── variables.tf
+│   ├── outputs.tf
+│   └── terraform.tfvars
+├── docs/
+│   ├── incident_report.md
+│   └── postmortem.md
 └── data/                  # Excel с историческими данными
 ```
 

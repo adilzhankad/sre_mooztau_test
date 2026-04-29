@@ -7,6 +7,8 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
     volumes:
       - pgdata:/var/lib/postgresql/data
+    networks:
+      - mooztau_net
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres}"]
       interval: 5s
@@ -22,10 +24,18 @@ services:
       db:
         condition: service_healthy
     ports:
-      - "8004:8004"
+      - "8002:8002"
+    networks:
+      - mooztau_net
     restart: unless-stopped
     command: >
-      sh -c "sleep 3 && python seed.py && uvicorn main:app --host 0.0.0.0 --port 8004 --workers 2"
+      sh -c "sleep 3 && python seed.py && uvicorn main:app --host 0.0.0.0 --port 8002 --workers 2"
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8002/health')\""]
+      interval: 30s
+      timeout: 10s
+      start_period: 15s
+      retries: 3
 
   orders:
     build: ./orders_service
@@ -41,23 +51,176 @@ services:
       - "8001:8001"
     volumes:
       - ./data:/app/data
+    networks:
+      - mooztau_net
     restart: unless-stopped
     command: >
       sh -c "alembic upgrade head && python -m scripts.seed && uvicorn main:app --host 0.0.0.0 --port 8001 --workers 2"
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8001/health')\""]
+      interval: 30s
+      timeout: 10s
+      start_period: 15s
+      retries: 3
+
+  finance:
+    build: ./finance_service
+    env_file: .env
+    environment:
+      DB_HOST: db
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8003:8003"
+    networks:
+      - mooztau_net
+    restart: unless-stopped
+    command: >
+      sh -c "python seed.py && uvicorn main:app --host 0.0.0.0 --port 8003 --workers 2"
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8003/health')\""]
+      interval: 30s
+      timeout: 10s
+      start_period: 15s
+      retries: 3
+
+  product:
+    build: ./product_service
+    env_file: .env
+    environment:
+      DB_HOST: db
+    depends_on:
+      orders:
+        condition: service_started
+    ports:
+      - "8004:8004"
+    networks:
+      - mooztau_net
+    restart: unless-stopped
+    command: >
+      sh -c "uvicorn main:app --host 0.0.0.0 --port 8004 --workers 2"
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8004/health')\""]
+      interval: 30s
+      timeout: 10s
+      start_period: 15s
+      retries: 3
+
+  user:
+    build: ./user_service
+    env_file: .env
+    environment:
+      DB_HOST: db
+    depends_on:
+      orders:
+        condition: service_started
+    ports:
+      - "8005:8005"
+    networks:
+      - mooztau_net
+    restart: unless-stopped
+    command: >
+      sh -c "uvicorn main:app --host 0.0.0.0 --port 8005 --workers 2"
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8005/health')\""]
+      interval: 30s
+      timeout: 10s
+      start_period: 15s
+      retries: 3
+
+  chat:
+    build: ./chat_service
+    env_file: .env
+    environment:
+      DB_HOST: db
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8006:8006"
+    networks:
+      - mooztau_net
+    restart: unless-stopped
+    command: >
+      sh -c "uvicorn main:app --host 0.0.0.0 --port 8006 --workers 2"
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8006/health')\""]
+      interval: 30s
+      timeout: 10s
+      start_period: 15s
+      retries: 3
 
   frontend:
     build:
-      context: ./frontend
+      context: ./MoozTau
       args:
-        VITE_AUTH_API_URL: "https://api.mooztau.kz"
-        VITE_ORDERS_API_URL: "https://api.mooztau.kz"
-        VITE_FINANCE_API_URL: "https://api.mooztau.kz"
+        VITE_MOCK: "false"
+        VITE_AUTH_API_URL: "http://213.155.22.46:8002"
+        VITE_ORDERS_API_URL: "http://213.155.22.46:8001"
+        VITE_FINANCE_API_URL: "http://213.155.22.46:8003"
+        VITE_AUDIT_API_URL: "http://213.155.22.46:8001"
     ports:
       - "0.0.0.0:3100:80"
+    networks:
+      - mooztau_net
     depends_on:
       - auth
       - orders
+      - finance
+    restart: unless-stopped
+
+  prometheus:
+    image: prom/prometheus:v2.51.0
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./monitoring/prometheus/alerts.yml:/etc/prometheus/alerts.yml:ro
+      - prometheus_data:/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--web.console.libraries=/usr/share/prometheus/console_libraries"
+      - "--web.console.templates=/usr/share/prometheus/consoles"
+    ports:
+      - "9090:9090"
+    networks:
+      - mooztau_net
+    restart: unless-stopped
+
+  grafana:
+    image: grafana/grafana:10.4.2
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD:-admin}
+      GF_USERS_ALLOW_SIGN_UP: "false"
+    volumes:
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - grafana_data:/var/lib/grafana
+    ports:
+      - "3000:3000"
+    networks:
+      - mooztau_net
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+
+  alertmanager:
+    image: prom/alertmanager:v0.27.0
+    volumes:
+      - ./monitoring/alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
+    command:
+      - "--config.file=/etc/alertmanager/alertmanager.yml"
+    ports:
+      - "9093:9093"
+    networks:
+      - mooztau_net
     restart: unless-stopped
 
 volumes:
   pgdata:
+  prometheus_data:
+  grafana_data:
+
+networks:
+  mooztau_net:
+    driver: bridge

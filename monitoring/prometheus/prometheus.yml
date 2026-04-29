@@ -11,17 +11,32 @@ rule_files:
   - "alerts.yml"
 
 scrape_configs:
-  - job_name: "orders-service"
-    metrics_path: /metrics
-    static_configs:
-      - targets: ["orders:8001"]
-
   - job_name: "auth-service"
     metrics_path: /metrics
     static_configs:
       - targets: ["auth:8002"]
 
+  - job_name: "orders-service"
+    metrics_path: /metrics
+    static_configs:
+      - targets: ["orders:8001"]
+
   - job_name: "finance-service"
     metrics_path: /metrics
     static_configs:
       - targets: ["finance:8003"]
+
+  - job_name: "product-service"
+    metrics_path: /metrics
+    static_configs:
+      - targets: ["product:8004"]
+
+  - job_name: "user-service"
+    metrics_path: /metrics
+    static_configs:
+      - targets: ["user:8005"]
+
+  - job_name: "chat-service"
+    metrics_path: /metrics
+    static_configs:
+      - targets: ["chat:8006"]
