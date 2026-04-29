@@ -155,11 +155,12 @@ services:
     build:
       context: ./MoozTau
       args:
-        VITE_MOCK: "false"
-        VITE_AUTH_API_URL: "http://213.155.22.46:8002"
-        VITE_ORDERS_API_URL: "http://213.155.22.46:8001"
-        VITE_FINANCE_API_URL: "http://213.155.22.46:8003"
-        VITE_AUDIT_API_URL: "http://213.155.22.46:8001"
+        VITE_MOCK: "${VITE_MOCK:-false}"
+        VITE_AUTH_API_URL: "${VITE_AUTH_API_URL}"
+        VITE_ORDERS_API_URL: "${VITE_ORDERS_API_URL}"
+        VITE_FINANCE_API_URL: "${VITE_FINANCE_API_URL}"
+        VITE_AUDIT_API_URL: "${VITE_AUDIT_API_URL}"
+        VITE_CHAT_API_URL: "${VITE_CHAT_API_URL}"
     ports:
       - "0.0.0.0:3100:80"
     networks:
