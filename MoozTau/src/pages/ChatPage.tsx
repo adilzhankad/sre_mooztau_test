@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { CHAT_API_URL } from "@/constants";
 import { useAuthStore } from "@/stores/auth-store";
+import { useThemeStore } from "@/stores/theme-store";
 
 const WS_URL = CHAT_API_URL.replace(/^http/, "ws");
 
@@ -29,6 +30,10 @@ export function ChatPage() {
   const fullName = useAuthStore((s) => s.fullName ?? "Сотрудник");
   const role = useAuthStore((s) => s.role);
   const isAdmin = ADMIN_ROLES.includes(role ?? "");
+  const isDark = useThemeStore((s) => s.mode) === "dark";
+
+  const inBubbleBg = isDark ? "#334155" : "#f1f5f9";
+  const inBubbleColor = isDark ? "#f1f5f9" : "#1e293b";
 
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [activeConv, setActiveConv] = useState<Conversation | null>(null);
@@ -144,8 +149,8 @@ export function ChatPage() {
                 <div style={{
                   maxWidth: "70%", padding: "10px 14px",
                   borderRadius: isMine ? "18px 18px 4px 18px" : "18px 18px 18px 4px",
-                  background: isMine ? "#2563eb" : "var(--surface, #f1f5f9)",
-                  color: isMine ? "#fff" : "var(--text-default)",
+                  background: isMine ? "#2563eb" : inBubbleBg,
+                  color: isMine ? "#fff" : inBubbleColor,
                   fontSize: 14, lineHeight: 1.5, wordBreak: "break-word",
                 }}>
                   {msg.content}
