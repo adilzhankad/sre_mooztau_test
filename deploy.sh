@@ -4,6 +4,9 @@ set -e
 DEPLOY_DIR="$(cd "$(dirname "$0")" && pwd)"
 cd "$DEPLOY_DIR"
 
+echo "==> Validating configuration..."
+bash validate_config.sh .env
+
 echo "==> Pulling latest code..."
 git pull origin main
 

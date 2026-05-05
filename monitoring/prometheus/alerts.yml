@@ -1,6 +1,15 @@
 groups:
   - name: mooztau_alerts
     rules:
+      - alert: ServiceDown
+        expr: up == 0
+        for: 15s
+        labels:
+          severity: critical
+        annotations:
+          summary: "{{ $labels.job }} is down"
+          description: "Service {{ $labels.job }} has been unreachable for over 15 seconds."
+
       - alert: HighErrorRate
         expr: |
           (
@@ -25,11 +34,32 @@ groups:
           summary: "High latency on {{ $labels.job }}"
           description: "P95 latency is {{ $value }}s (>2s) for 5 minutes."
 
-      - alert: ServiceDown
-        expr: up == 0
-        for: 15s
+      - alert: HighRequestRate
+        expr: |
+          sum by (job) (rate(http_request_duration_seconds_count[1m])) > 50
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High request rate on {{ $labels.job }}"
+          description: "{{ $labels.job }} is handling {{ $value | humanize }} RPS — approaching capacity limits."
+
+      - alert: ServiceSaturated
+        expr: |
+          histogram_quantile(0.99, sum by (le, job) (rate(http_request_duration_seconds_bucket[5m]))) > 5
+        for: 3m
         labels:
           severity: critical
         annotations:
-          summary: "{{ $labels.job }} is down"
-          description: "Service {{ $labels.job }} has been unreachable for 1 minute."
+          summary: "{{ $labels.job }} is saturated"
+          description: "P99 latency is {{ $value }}s — service is likely overloaded."
+
+      - alert: NoMetrics
+        expr: |
+          absent(http_request_duration_seconds_count) == 1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "No HTTP metrics received"
+          description: "No http_request_duration_seconds_count metric for 5 minutes — instrumentation may be broken."
