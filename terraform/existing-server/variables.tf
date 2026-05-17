@@ -1,5 +1,5 @@
 variable "server_ip" {
-  description = "IP address of the target server"
+  description = "Public IP of the existing server"
   type        = string
   default     = "213.155.22.46"
 }
@@ -11,31 +11,25 @@ variable "server_user" {
 }
 
 variable "ssh_private_key_path" {
-  description = "Path to SSH private key"
+  description = "Path to SSH private key authorized on the server"
   type        = string
-  default     = "~/.ssh/id_ed25519"
+  default     = "~/.ssh/github_actions"
 }
 
 variable "project_path" {
-  description = "Local path to the project directory"
+  description = "Local path to the project directory (for rsync source)"
   type        = string
   default     = "/Users/adilzhankadyrov/Desktop/Mooztau_back"
 }
 
 variable "deploy_path" {
-  description = "Remote path where project will be deployed"
+  description = "Remote path where the project will be synced and built"
   type        = string
   default     = "/home/ubuntu/mooztau/Mooztau_back"
 }
 
 variable "domain" {
-  description = "Domain name for Nginx config"
+  description = "Domain name to configure in Nginx"
   type        = string
   default     = "medhome.kz"
-}
-
-variable "project_name" {
-  description = "Name of the project"
-  type        = string
-  default     = "mooztau"
 }

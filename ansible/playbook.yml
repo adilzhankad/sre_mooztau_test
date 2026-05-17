@@ -1,0 +1,15 @@
+---
+- name: MoozTau — full deployment
+  hosts: mooztau
+  become: true
+  gather_facts: true
+
+  vars:
+    project_local_path: "{{ playbook_dir }}/../"
+    deploy_path: /home/ubuntu/mooztau/Mooztau_back
+
+  roles:
+    - docker
+    - app
+    - nginx
+    - monitoring

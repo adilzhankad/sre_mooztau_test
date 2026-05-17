@@ -1,0 +1,27 @@
+# Yandex Cloud credentials — get them via:
+#   yc config list
+#   or
+#   https://oauth.yandex.com/authorize?response_type=token&client_id=1a6990aa636648e9b2ef855fa7bec2fb
+yc_token     = "y0_AgAAAA..._REPLACE_ME"
+yc_cloud_id  = "b1g..."
+yc_folder_id = "b1g..."
+yc_zone      = "ru-central1-a"
+
+# VM sizing (preemptible saves ~70% but VM stops after 24h)
+vm_cores       = 4
+vm_memory_gb   = 8
+vm_disk_gb     = 30
+vm_preemptible = true
+
+# SSH access
+server_user          = "ubuntu"
+ssh_private_key_path = "~/.ssh/id_ed25519"
+ssh_public_key_path  = "~/.ssh/id_ed25519.pub"
+
+# Local + remote paths
+project_path = "/Users/adilzhankadyrov/Desktop/Mooztau_back"
+deploy_path  = "/home/ubuntu/mooztau/Mooztau_back"
+
+# Domain & naming
+domain       = "medhome.kz"
+project_name = "mooztau"

@@ -1,0 +1,30 @@
+---
+- name: Ensure monitoring directories exist on server
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: ubuntu
+    group: ubuntu
+    mode: "0755"
+  loop:
+    - "{{ deploy_path }}/monitoring/prometheus"
+    - "{{ deploy_path }}/monitoring/grafana/provisioning"
+    - "{{ deploy_path }}/monitoring/alertmanager"
+
+- name: Check Prometheus is running
+  command: docker inspect --format="{{ '{{' }}.State.Status{{ '}}' }}" mooztau_back-prometheus-1
+  register: prometheus_status
+  ignore_errors: true
+  changed_when: false
+
+- name: Check Grafana is running
+  command: docker inspect --format="{{ '{{' }}.State.Status{{ '}}' }}" mooztau_back-grafana-1
+  register: grafana_status
+  ignore_errors: true
+  changed_when: false
+
+- name: Print monitoring status
+  debug:
+    msg:
+      - "Prometheus: {{ prometheus_status.stdout | default('not running') }}"
+      - "Grafana: {{ grafana_status.stdout | default('not running') }}"

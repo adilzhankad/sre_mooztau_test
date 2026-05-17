@@ -7,3 +7,23 @@ __pycache__/
 *.egg-info/
 alembic/versions/__pycache__/
 CLAUDE.md
+
+# Terraform
+terraform/**/.terraform/
+terraform/**/.terraform.lock.hcl
+terraform/**/*.tfvars
+!terraform/**/*.tfvars.example
+terraform/**/*.tfstate
+terraform/**/*.tfstate.*
+terraform/**/crash.log
+terraform/**/crash.*.log
+
+# Ansible
+ansible/*.retry
+ansible/inventory/hosts.local
+
+# SSH keys
+*.pem
+*_rsa
+*_ed25519
+!*.pub

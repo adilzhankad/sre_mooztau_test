@@ -1,0 +1,58 @@
+---
+- name: Create deploy directory
+  file:
+    path: "{{ deploy_path }}"
+    state: directory
+    owner: ubuntu
+    group: ubuntu
+    mode: "0755"
+
+- name: Sync project files to server
+  synchronize:
+    src: "{{ playbook_dir }}/../"
+    dest: "{{ deploy_path }}/"
+    delete: false
+    recursive: true
+    rsync_opts:
+      - "--exclude=node_modules"
+      - "--exclude=.git"
+      - "--exclude=venv"
+      - "--exclude=__pycache__"
+      - "--exclude=.terraform"
+      - "--exclude=*.tfstate"
+  delegate_to: localhost
+
+- name: Copy .env file to server
+  template:
+    src: env.j2
+    dest: "{{ deploy_path }}/.env"
+    owner: ubuntu
+    group: ubuntu
+    mode: "0600"
+
+- name: Pull latest images (if any)
+  command: docker compose pull
+  args:
+    chdir: "{{ deploy_path }}"
+  ignore_errors: true
+
+- name: Stop running containers
+  command: docker compose down --remove-orphans
+  args:
+    chdir: "{{ deploy_path }}"
+  ignore_errors: true
+
+- name: Build and start all services
+  command: docker compose up -d --build
+  args:
+    chdir: "{{ deploy_path }}"
+
+- name: Wait for services to become healthy
+  command: docker compose ps
+  args:
+    chdir: "{{ deploy_path }}"
+  register: compose_status
+  retries: 10
+  delay: 10
+  until: compose_status.rc == 0
+  changed_when: false

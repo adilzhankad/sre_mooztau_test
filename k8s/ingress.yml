@@ -1,0 +1,41 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mooztau-ingress
+  namespace: mooztau
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: medhome.kz
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend
+                port:
+                  number: 80
+          - path: /api/auth
+            pathType: Prefix
+            backend:
+              service:
+                name: auth
+                port:
+                  number: 8002
+          - path: /api/orders
+            pathType: Prefix
+            backend:
+              service:
+                name: orders
+                port:
+                  number: 8001
+          - path: /api/finance
+            pathType: Prefix
+            backend:
+              service:
+                name: finance
+                port:
+                  number: 8003

@@ -1,7 +1,0 @@
-server_ip            = "213.155.22.46"
-server_user          = "ubuntu"
-ssh_private_key_path = "~/.ssh/id_ed25519"
-project_path         = "/Users/adilzhankadyrov/Desktop/Mooztau_back"
-deploy_path          = "/home/ubuntu/mooztau/Mooztau_back"
-domain               = "medhome.kz"
-project_name         = "mooztau"

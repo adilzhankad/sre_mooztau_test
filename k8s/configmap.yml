@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mooztau-config
+  namespace: mooztau
+data:
+  DB_HOST: "postgres"
+  DB_NAME: "mooztau_db"
+  DB_USER: "postgres"
+  VITE_MOCK: "false"

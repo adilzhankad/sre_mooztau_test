@@ -2,34 +2,39 @@
 
 Платформа управления производством и дилерской сетью холодильного оборудования.
 
-
+Реализует полный цикл SRE-практик: 6 микросервисов, multi-orchestration (Docker Swarm + Kubernetes), Infrastructure as Code (Terraform + Ansible), мониторинг (Prometheus + Grafana), incident response и capacity planning.
 
 ---
 
 ## Архитектура
 
-5 Docker-контейнеров, 3 микросервиса + PostgreSQL + React фронтенд:
+6 микросервисов + PostgreSQL + React фронтенд:
 
 ```
-┌─────────────────────────────────────────────────┐
-│              Frontend (React)  :3100             │
-│         Nginx проксирует все /api/ запросы       │
-└──────────┬──────────┬──────────┬────────────────┘
-           │          │          │
-     ┌─────┴───┐ ┌────┴────┐ ┌──┴──────┐
-     │  Auth   │ │ Orders  │ │ Finance │
-     │  :8002  │ │  :8001  │ │  :8003  │
-     └────┬────┘ └────┬────┘ └────┬────┘
-          │           │           │
-          └─────── PostgreSQL ────┘
+┌─────────────────────────────────────────────────────────┐
+│                  Frontend (React)  :3100                 │
+│              Nginx проксирует все /api/ запросы          │
+└──────┬──────────┬──────────┬───────┬──────┬─────────────┘
+       │          │          │       │      │
+  ┌────┴──┐ ┌────┴───┐ ┌────┴──┐ ┌──┴──┐ ┌┴────┐ ┌──────┐
+  │ Auth  │ │Orders  │ │Finance│ │Prod.│ │User │ │ Chat │
+  │ :8002 │ │ :8001  │ │ :8003 │ │:8004│ │:8005│ │:8006 │
+  └────┬──┘ └────┬───┘ └────┬──┘ └──┬──┘ └┬────┘ └──┬───┘
+       │         │          │       │     │          │
+       └─────────┴──────────┴── PostgreSQL ──────────┘
+
+Monitoring: Prometheus :9090 → Grafana :3000 ← Alertmanager :9093
 ```
 
-| Сервис | Что делает |
-|--------|-----------|
-| **auth** | Пользователи, организации, JWT токены, роли |
-| **orders** | Заказы, продукция, цены, производство, склад, аналитика |
-| **finance** | Приход/расход, категории расходов, банковские счета, отчёты |
-| **frontend** | React + TypeScript + Tailwind, мобильная адаптация (Capacitor) |
+| Сервис | Порт | Что делает |
+|--------|------|-----------|
+| **auth** | 8002 | Пользователи, организации, JWT токены, роли |
+| **orders** | 8001 | Заказы, продукция, цены, производство, склад, аналитика |
+| **finance** | 8003 | Приход/расход, категории расходов, банковские счета, отчёты |
+| **product** | 8004 | Каталог продукции, модели, цены |
+| **user** | 8005 | Профили пользователей, управление данными |
+| **chat** | 8006 | Внутренний чат между пользователями |
+| **frontend** | 3100 | React + TypeScript + Tailwind, мобильная адаптация (Capacitor) |
 
 Общая БД PostgreSQL, единый JWT токен для всех сервисов.
 
@@ -297,16 +302,158 @@ Mooztau_back/
 │   ├── prometheus/        # prometheus.yml + alerts.yml
 │   ├── grafana/           # Provisioning + dashboard JSON
 │   └── alertmanager/      # alertmanager.yml
-├── terraform/             # IaC для Yandex Cloud
-│   ├── main.tf
-│   ├── variables.tf
-│   ├── outputs.tf
-│   └── terraform.tfvars
+├── terraform/             # IaC — две конфигурации
+│   ├── README.md          # Описание двух вариантов
+│   ├── existing-server/   # Деплой на готовый VPS (213.155.22.46)
+│   │   ├── main.tf        # null_resource: Docker + rsync + compose + Nginx
+│   │   ├── variables.tf
+│   │   ├── outputs.tf
+│   │   └── terraform.tfvars
+│   └── cloud/             # Полноценное провижининг Yandex Cloud VM
+│       ├── main.tf        # Yandex provider + Ubuntu image
+│       ├── network.tf     # VPC + subnet + security group
+│       ├── compute.tf     # yandex_compute_instance (4 CPU, 8GB, 30GB)
+│       ├── deploy.tf      # Install Docker + rsync + compose
+│       ├── variables.tf
+│       ├── outputs.tf
+│       └── terraform.tfvars.example
+├── ansible/               # Configuration management
+│   ├── playbook.yml       # Главный playbook
+│   ├── inventory.ini      # Хосты
+│   └── roles/
+│       ├── docker/        # Установка Docker
+│       ├── app/           # Деплой приложения
+│       ├── nginx/         # Настройка Nginx
+│       └── monitoring/    # Проверка мониторинга
+├── k8s/                   # Kubernetes manifests
+│   ├── namespace.yml
+│   ├── configmap.yml
+│   ├── secret.yml
+│   ├── postgres.yml
+│   ├── auth.yml / orders.yml / finance.yml / product.yml / user.yml / chat.yml
+│   ├── monitoring.yml     # Prometheus + Grafana
+│   └── ingress.yml
+├── docker-stack.yml       # Docker Swarm stack (replicas + resources + overlay network)
 ├── docs/
+│   ├── sli_slo.md         # SLI/SLO определения + PromQL + Error Budget
+│   ├── capacity_planning.md # Нагрузочное тестирование + стратегии
 │   ├── incident_report.md
 │   └── postmortem.md
 └── data/                  # Excel с историческими данными
 ```
+
+---
+
+## Docker Swarm
+
+Multi-node кластер с репликацией сервисов:
+
+```bash
+# Инициализация Swarm
+docker swarm init
+
+# Сборка образов (нужно до deploy)
+docker compose build
+
+# Деплой всего стека
+docker stack deploy -c docker-stack.yml mooztau
+
+# Проверить сервисы
+docker service ls
+
+# Масштабировать orders до 4 реплик
+docker service scale mooztau_orders=4
+
+# Удалить стек
+docker stack rm mooztau
+```
+
+**Особенности `docker-stack.yml`:**
+- Каждый микросервис: 2 реплики по умолчанию
+- Rolling update: `parallelism: 1, order: start-first`
+- Resource limits: CPU и Memory на каждый сервис
+- Overlay network для коммуникации между нодами
+- БД и мониторинг — только на manager-ноде
+
+---
+
+## Kubernetes
+
+```bash
+# Применить все манифесты
+kubectl apply -f k8s/
+
+# Проверить поды
+kubectl get pods -n mooztau
+
+# Проверить сервисы
+kubectl get services -n mooztau
+
+# Логи orders
+kubectl logs -l app=orders -n mooztau
+
+# Масштабировать
+kubectl scale deployment orders --replicas=4 -n mooztau
+
+# Автоскейлинг по CPU
+kubectl autoscale deployment orders --cpu-percent=70 --min=2 --max=6 -n mooztau
+```
+
+---
+
+## Ansible
+
+Автоматизированный деплой на удалённый сервер:
+
+```bash
+# Установить Ansible
+pip install ansible
+
+# Проверить доступность хоста
+ansible mooztau -i ansible/inventory.ini -m ping
+
+# Полный деплой (Docker + App + Nginx + Monitoring)
+ansible-playbook -i ansible/inventory.ini ansible/playbook.yml
+
+# Только деплой приложения (без Docker-install)
+ansible-playbook -i ansible/inventory.ini ansible/playbook.yml --tags app
+```
+
+**Роли:**
+- `docker` — установка Docker CE + Compose plugin
+- `app` — rsync проекта + docker compose up
+- `nginx` — конфигурация reverse proxy
+- `monitoring` — проверка Prometheus/Grafana
+
+---
+
+## Валидация всех конфигов
+
+Прогнать единый скрипт для проверки Docker Compose, Swarm, Terraform, Ansible, Kubernetes:
+
+```bash
+bash scripts/validate_all.sh
+```
+
+Требования:
+- `terraform` (brew install terraform)
+- `ansible` (brew install ansible)
+- `kubeconform` (brew install kubeconform)
+- `docker`
+
+---
+
+## SRE документация
+
+| Документ | Что внутри |
+|----------|-----------|
+| [docs/sli_slo.md](docs/sli_slo.md) | SLI определения (PromQL), SLO (≥99% / ≤200ms / ≤1%), Error Budget |
+| [docs/capacity_planning.md](docs/capacity_planning.md) | Нагрузочное тестирование, bottlenecks, стратегии масштабирования |
+| [docs/incident_report.md](docs/incident_report.md) | Симуляция отказа orders service |
+| [docs/postmortem.md](docs/postmortem.md) | Postmortem analysis |
+| [screenshots/README.md](screenshots/README.md) | Чек-лист скриншотов для сдачи |
+
+---
 
 ## Репозитории
 

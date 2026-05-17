@@ -1,0 +1,39 @@
+server {
+    listen 80;
+    server_name {{ domain }} www.{{ domain }} {{ ansible_host }};
+
+    # Frontend
+    location / {
+        proxy_pass http://localhost:3100;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+
+    # Auth service
+    location /api/auth/ {
+        proxy_pass http://localhost:8002/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+
+    # Orders service
+    location /api/orders/ {
+        proxy_pass http://localhost:8001/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+
+    # Finance service
+    location /api/finance/ {
+        proxy_pass http://localhost:8003/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+
+    # Grafana
+    location /grafana/ {
+        proxy_pass http://localhost:3000/;
+        proxy_set_header Host $host;
+    }
+}
