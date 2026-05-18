@@ -1,0 +1,105 @@
+name: CI — Lint & Validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  python-lint:
+    name: Python lint (ruff)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install ruff
+        run: pip install ruff==0.7.4
+      - name: Lint microservices
+        run: |
+          ruff check \
+            auth_service \
+            orders_service \
+            finance_service \
+            product_service \
+            user_service \
+            chat_service \
+            --select=E,F,W \
+            --ignore=E501,W291,W293,E402
+
+  docker-compose-validate:
+    name: docker compose config
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate docker-compose.yml
+        run: docker compose config --quiet
+      - name: Validate docker-stack.yml
+        run: docker compose -f docker-stack.yml config --quiet
+
+  terraform-validate:
+    name: Terraform validate
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        config: [existing-server, cloud]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.9.0"
+      - name: terraform fmt
+        working-directory: terraform/${{ matrix.config }}
+        run: terraform fmt -check -recursive
+      - name: terraform init
+        working-directory: terraform/${{ matrix.config }}
+        run: terraform init -backend=false
+      - name: terraform validate
+        working-directory: terraform/${{ matrix.config }}
+        run: terraform validate
+
+  ansible-syntax:
+    name: Ansible syntax-check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install ansible
+        run: pip install ansible-core==2.17.6
+      - name: Syntax check
+        run: ansible-playbook --syntax-check -i ansible/inventory.ini ansible/playbook.yml
+
+  k8s-validate:
+    name: Kubernetes manifests (kubeconform)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install kubeconform
+        run: |
+          curl -sSL https://github.com/yannh/kubeconform/releases/latest/download/kubeconform-linux-amd64.tar.gz \
+            | tar -xz -C /usr/local/bin kubeconform
+      - name: Validate manifests
+        run: kubeconform -strict -summary k8s/
+
+  yaml-lint:
+    name: YAML lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install yamllint
+        run: pip install yamllint==1.35.1
+      - name: Lint YAMLs (relaxed rules)
+        run: |
+          yamllint -d "{extends: relaxed, rules: {line-length: disable}}" \
+            docker-compose.yml docker-stack.yml \
+            monitoring/ k8s/ ansible/ .github/ || true

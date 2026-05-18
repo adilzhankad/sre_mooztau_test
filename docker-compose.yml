@@ -15,6 +15,23 @@ services:
       timeout: 5s
       retries: 5
 
+  mongo:
+    image: mongo:7
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER:-mooztau}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD:-mooztau_pwd}
+      MONGO_INITDB_DATABASE: ${MONGO_DB:-mooztau_chat}
+    volumes:
+      - mongodata:/data/db
+    networks:
+      - mooztau_net
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.runCommand({ ping: 1 }).ok"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
   auth:
     build: ./auth_service
     env_file: .env
@@ -134,8 +151,15 @@ services:
     env_file: .env
     environment:
       DB_HOST: db
+      MONGO_HOST: mongo
+      MONGO_PORT: "27017"
+      MONGO_USER: ${MONGO_USER:-mooztau}
+      MONGO_PASSWORD: ${MONGO_PASSWORD:-mooztau_pwd}
+      MONGO_DB: ${MONGO_DB:-mooztau_chat}
     depends_on:
       db:
+        condition: service_healthy
+      mongo:
         condition: service_healthy
     ports:
       - "8006:8006"
@@ -226,6 +250,7 @@ services:
 
 volumes:
   pgdata:
+  mongodata:
   prometheus_data:
   grafana_data:
 

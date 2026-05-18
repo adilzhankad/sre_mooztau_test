@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 
 from database import get_db, SessionLocal
 from models import ChatMessage, ChatParticipant, ChatRoom, DirectConversation, DirectMessage
+from mongo import archive_message, archive_stats, search_archive
 from schemas import ChatRoomCreate, ChatRoomOut, MessageCreate, MessageOut, DirectConversationCreate, DirectConversationOut, DirectMessageOut
 from ws_manager import manager
 
@@ -94,7 +95,29 @@ def send_message(room_id: int, data: MessageCreate, db: Session = Depends(get_db
     db.add(msg)
     db.commit()
     db.refresh(msg)
+    archive_message(
+        room_id=room_id,
+        sender_user_id=data.sender_user_id,
+        sender_name=data.sender_name,
+        content=data.content,
+        created_at=msg.created_at,
+        message_pg_id=msg.id,
+    )
     return msg
+
+
+@router.get("/chats/archive/search")
+def search_messages(q: str, limit: int = 50):
+    """Full-text search across the MongoDB message archive."""
+    if not q or len(q.strip()) < 2:
+        raise HTTPException(status_code=400, detail="Query must be at least 2 characters")
+    return {"query": q, "results": search_archive(q.strip(), limit=limit)}
+
+
+@router.get("/chats/archive/stats")
+def get_archive_stats():
+    """Return archive metrics from MongoDB."""
+    return archive_stats()
 
 
 # ── WebSocket ─────────────────────────────────────────────────────────────────
@@ -140,6 +163,14 @@ async def websocket_endpoint(
                 db.add(msg)
                 db.commit()
                 db.refresh(msg)
+                archive_message(
+                    room_id=room_id,
+                    sender_user_id=user_id,
+                    sender_name=user_name,
+                    content=content,
+                    created_at=msg.created_at,
+                    message_pg_id=msg.id,
+                )
 
                 # Рассылаем всем в комнате
                 await manager.broadcast(room_id, {
@@ -237,6 +268,15 @@ async def direct_ws(
                 conv.last_message_at = datetime.utcnow()
                 db.commit()
                 db.refresh(msg)
+                archive_message(
+                    room_id=0,
+                    conversation_id=conv_id,
+                    sender_user_id=user_id,
+                    sender_name=user_name,
+                    content=content,
+                    created_at=msg.created_at,
+                    message_pg_id=msg.id,
+                )
 
                 await manager.broadcast(ws_key, {
                     "type": "message",

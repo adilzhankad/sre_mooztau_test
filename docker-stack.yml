@@ -24,6 +24,32 @@ services:
       timeout: 5s
       retries: 5
 
+  mongo:
+    image: mongo:7
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER:-mooztau}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD:-mooztau_pwd}
+      MONGO_INITDB_DATABASE: ${MONGO_DB:-mooztau_chat}
+    volumes:
+      - mongodata:/data/db
+    networks:
+      - mooztau_net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.runCommand({ ping: 1 }).ok"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
   auth:
     image: mooztau_auth:latest
     env_file: .env
@@ -300,6 +326,7 @@ services:
 
 volumes:
   pgdata:
+  mongodata:
   prometheus_data:
   grafana_data:
 

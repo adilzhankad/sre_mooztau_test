@@ -8,3 +8,6 @@ data:
   DB_NAME: "mooztau_db"
   DB_USER: "postgres"
   VITE_MOCK: "false"
+  MONGO_HOST: "mongo"
+  MONGO_PORT: "27017"
+  MONGO_DB: "mooztau_chat"
