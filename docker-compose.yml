@@ -26,11 +26,12 @@ services:
     networks:
       - mooztau_net
     healthcheck:
-      test: ["CMD", "mongosh", "--quiet", "--eval", "db.runCommand({ ping: 1 }).ok"]
-      interval: 10s
+      # Lightweight TCP check via bash (sh has no /dev/tcp). Avoids mongosh ~150MB RAM.
+      test: ["CMD", "bash", "-c", "echo > /dev/tcp/127.0.0.1/27017"]
+      interval: 30s
       timeout: 5s
       retries: 5
-      start_period: 20s
+      start_period: 30s
 
   auth:
     build: ./auth_service
