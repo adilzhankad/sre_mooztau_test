@@ -19,6 +19,20 @@
     state: link
   notify: Reload nginx
 
+- name: Deploy Grafana subdomain vhost
+  copy:
+    src: grafana.medhome.kz.conf
+    dest: /etc/nginx/sites-available/grafana.{{ domain }}
+    mode: "0644"
+  notify: Reload nginx
+
+- name: Enable Grafana subdomain
+  file:
+    src: /etc/nginx/sites-available/grafana.{{ domain }}
+    dest: /etc/nginx/sites-enabled/grafana.{{ domain }}
+    state: link
+  notify: Reload nginx
+
 - name: Remove default site
   file:
     path: /etc/nginx/sites-enabled/default
