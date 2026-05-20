@@ -221,13 +221,16 @@ services:
       GF_AUTH_ANONYMOUS_ENABLED: "true"
       GF_AUTH_ANONYMOUS_ORG_ROLE: "Viewer"
       GF_SECURITY_ALLOW_EMBEDDING: "true"
-      GF_SERVER_ROOT_URL: "%(protocol)s://%(domain)s:%(http_port)s/"
+      GF_SERVER_DOMAIN: "grafana.medhome.kz"
+      GF_SERVER_ROOT_URL: "https://grafana.medhome.kz"
     volumes:
       - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
       - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
       - grafana_data:/var/lib/grafana
     ports:
-      - "3000:3000"
+      # Bound to loopback only — public access goes through the nginx vhost
+      # grafana.medhome.kz (HTTPS). Not exposed on the public 3000 port.
+      - "127.0.0.1:3000:3000"
     networks:
       - mooztau_net
     depends_on:
